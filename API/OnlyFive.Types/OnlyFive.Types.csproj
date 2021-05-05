@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Helpers\Templates\**" />
+    <EmbeddedResource Remove="Helpers\Templates\**" />
+    <None Remove="Helpers\Templates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Helpers\EmailSender.cs" />
+    <Compile Remove="Helpers\EmailTemplates.cs" />
+    <Compile Remove="Helpers\Extensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Interfaces\" />
+  </ItemGroup>
+
+</Project>

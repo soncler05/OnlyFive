@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-lg-10">
+      <canvas id="c" ></canvas>
+  </div>
+  <!-- <div class="col-lg-2"> 
+      <div class="box mb-2 mt-1" id="box-1">
+          <span><h5 id="player-1"></h5> </span>
+      </div>
+      <div class="box" id="box-2">
+          <span>
+              <h5 id="player-2"></h5>
+          </span>
+      </div>
+  </div> -->
+</div>
+<div class="row">
+    <div class="col-3">
+        <ol>
+            <h5>One</h5>
+            <li *ngFor="let p of ground.gamePin.onePins">
+                <span *ngFor="let x of p.pinIds" [style.color]="(ground.getPlayer(p.playerId)).color">
+                    ({{ground.gamePin.getPinById(x, true) | json}});
+                </span>
+            </li>
+        </ol>
+    </div>
+    <div class="col-3">
+        <ol>
+            <h5>Two</h5>
+            <li *ngFor="let p of ground.gamePin.twoPins">
+                <span *ngFor="let x of p.pinIds" [style.color]="(ground.getPlayer(p.playerId)).color">
+                    ({{ground.gamePin.getPinById(x, true) | json}});
+                </span>
+            </li>
+        </ol>
+    </div>
+    <div class="col-3">
+        <ol>
+            <h5>Three</h5>
+            <li *ngFor="let p of ground.gamePin.threePins">
+                <span *ngFor="let x of p.pinIds" [style.color]="(ground.getPlayer(p.playerId)).color">
+                    ({{ground.gamePin.getPinById(x, true) | json}});
+                </span>
+            </li>
+        </ol>
+    </div>
+    <div class="col-3">
+        <ol>
+            <h5>Four</h5>
+            <li *ngFor="let p of ground.gamePin.fourPins">
+                <span *ngFor="let x of p.pinIds" [style.color]="(ground.getPlayer(p.playerId)).color">
+                    ({{ground.gamePin.getPinById(x, true) | json}});
+                </span>
+            </li>
+        </ol>
+    </div>
+</div>

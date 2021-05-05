@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnlyFive.BusinessInterface\OnlyFive.BusinessInterface.csproj" />
+    <ProjectReference Include="..\OnlyFive.RepositoryInterface\OnlyFive.RepositoryInterface.csproj" />
+    <ProjectReference Include="..\OnlyFive.Types\OnlyFive.Types.csproj" />
+  </ItemGroup>
+
+</Project>

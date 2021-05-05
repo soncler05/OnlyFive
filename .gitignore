@@ -1,46 +1,29 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
 
-# compiled output
-/dist
-/tmp
-/out-tsc
-# Only exists if Bazel was run
-/bazel-out
-
-# dependencies
-/node_modules
-
-# profiling files
-chrome-profiler-events*.json
-speed-measure-plugin*.json
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
-.DS_Store
-Thumbs.db
+/API/OnlyFive/obj
+/SPA/.vs
+/API/OnlyFive/bin/Debug/net5.0
+/API/OnlyFive.Types/bin/Debug/net5.0
+/API/.vs/OnlyFive
+/API/OnlyFive.Business/bin/Debug/net5.0
+/API/OnlyFive.Business/obj/Debug/net5.0
+/API/OnlyFive.Business/obj
+/API/OnlyFive.BusinessInterface/bin/Debug/net5.0
+/API/OnlyFive.BusinessInterface/obj/Debug/net5.0
+/API/OnlyFive.BusinessInterface/obj
+/API/OnlyFive.Common/bin/Debug/net5.0/ref
+/API/OnlyFive.Common/bin/Debug/net5.0
+/API/OnlyFive.Common/obj/Debug/net5.0
+/API/OnlyFive.Common/obj
+/API/OnlyFive.DTO/obj
+/API/OnlyFive.Repository/bin/Debug/net5.0
+/API/OnlyFive.Repository/obj/Debug/net5.0
+/API/OnlyFive.Repository/obj
+/API/OnlyFive.RepositoryInterface/bin/Debug/net5.0
+/API/OnlyFive.RepositoryInterface/obj/Debug/net5.0
+/API/OnlyFive.RepositoryInterface/obj
+/API/OnlyFive.Types/obj/Debug/net5.0
+/API/OnlyFive.Types/obj
+/API/OnlyFive.sln
