@@ -1,5 +1,6 @@
 import * as FabricJs from 'fabric';
 import { RealGamePin } from './GamePinClass';
+import { MinimapClass } from './MinimapClass';
 import { Pin } from './pin';
 import { Player } from './player';
 
@@ -19,6 +20,7 @@ export class GroundClass {
 
     private tmp: FabricJs.fabric.Object;
     private lastPin: FabricJs.fabric.Object;
+    minimap: MinimapClass;
 
     getPlayer(playerId: string): Player{
         return [this._host, this._guest].find(x => x.playerId == playerId);
@@ -27,7 +29,7 @@ export class GroundClass {
     /**
      *
      */
-    constructor(host: Player, guest: Player) {console.log('ground');
+    constructor(host: Player, guest: Player) {
     
         this._host = host;
         this._guest = guest;
@@ -53,6 +55,8 @@ export class GroundClass {
             this.addLastCircle.bind(this),
             this.play.bind(this));
 
+        this.minimap = new MinimapClass(this.canvas);
+
         this._gamePin.automaticPlay();
     }
 
@@ -71,7 +75,8 @@ export class GroundClass {
 
     private OnMouseMove (options) {
 
-        var result = this.calculatePosition(options.e.layerX, options.e.layerY, this._sideUnit); 
+        var pointer = this.canvas.getPointer(options.e);
+        var result = this.calculatePosition(pointer.x, pointer.y, this._sideUnit); 
     
         if(this.tmp) this.canvas.remove(this.tmp);
         this.tmp = this.addCircle(result.left, result.top, this.playerTurn.color, 0.4);
@@ -237,6 +242,5 @@ export class GroundClass {
         
             });
         });
-}
-    
+    }
 }

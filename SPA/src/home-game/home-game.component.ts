@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { GroundClass } from 'src/tools/GroundClass';
 import { Helper } from 'src/tools/player';
 
@@ -27,5 +27,16 @@ export class HomeGameComponent implements OnInit {
       }, autoPlayer
     )
   }
+  
+  @HostListener('window:scroll', ['$event'])
+  noScroll(event) {
+      window.scrollTo(0, 0);
+  }
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+     this.ground.minimap.onResize();
+  }
 
+  
 }
