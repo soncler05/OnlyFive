@@ -3,7 +3,21 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: true,
+  baseUrl: "https://localhost:44320/api", // Change this to the address of your backend API if different from frontend address
+  tokenUrl: "https://localhost:44320", // For IdentityServer/Authorization Server API. You can set to null if same as baseUrl
+  loginUrl: '/login',
+  openIdConnect: {
+    google: {
+      name:"google",
+      issuer:"https://accounts.google.com",
+      clientId: '795536398021-pr0jruj56qdk6phcm1ed9jjbabthv0jb.apps.googleusercontent.com'
+    },
+    facebook: {
+      name:"facebook",
+      clientId: "326368018362079"
+    }
+  }
 };
 
 /*

@@ -50,7 +50,7 @@ namespace OnlyFive.Business.Authorization
             var sub = context.Subject.GetSubjectId();
             var user = await _userManager.FindByIdAsync(sub);
 
-            context.IsActive = true; //(user != null) && user.IsEnabled;
+            context.IsActive = (user != null) && user.IsEnabled;
         }
     }
 }

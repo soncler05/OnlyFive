@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlyFive.RepositoryInterface;
+using OnlyFive.Types.Helpers;
 using OnlyFive.Types.Models;
 using System;
 using System.Threading.Tasks;
@@ -30,14 +31,12 @@ namespace OnlyFive.Repository
             {
                 _logger.LogInformation("Generating inbuilt accounts");
 
-                const string adminRoleName = "administrator";
-                const string userRoleName = "user";
+                await EnsureRoleAsync(Constants.ROLE_ADMIN, "Default administrator", new string[] { });
+                await EnsureRoleAsync(Constants.ROLE_USER, "Default user", new string[] { });
 
-                await EnsureRoleAsync(adminRoleName, "Default administrator", new string[] { });
-                await EnsureRoleAsync(userRoleName, "Default user", new string[] { });
-
-                await CreateUserAsync("admin", "tempP@ss123", "Inbuilt Administrator", "soncler05@gmail.com", "+52 (465) 121-1341", new string[] { adminRoleName });
-                await CreateUserAsync("user", "tempP@ss123", "Inbuilt Standard User", "user@ebenmonney.com", "+1 (123) 000-0001", new string[] { userRoleName });
+                await CreateUserAsync("admin", "tempP@ss123", "Inbuilt Administrator", "soncler05@gmail.com", "+52 (465) 121-1341", new string[] { Constants.ROLE_ADMIN }, "b054d785-6997-49d5-a339-573de64e0901");
+                await CreateUserAsync(Constants.DEFAULT_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.DEFAULT_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.DEFAULT_USER.Id);
+                await CreateUserAsync(Constants.AUTOMATIC_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.AUTOMATIC_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.AUTOMATIC_USER.Id);
 
                 _logger.LogInformation("Inbuilt account generation completed");
             }
@@ -59,10 +58,11 @@ namespace OnlyFive.Repository
             }
         }
 
-        private async Task<ApplicationUser> CreateUserAsync(string userName, string password, string fullName, string email, string phoneNumber, string[] roles)
+        private async Task<ApplicationUser> CreateUserAsync(string userName, string password, string fullName, string email, string phoneNumber, string[] roles, string id)
         {
             ApplicationUser applicationUser = new ApplicationUser
             {
+                Id = id,
                 UserName = userName,
                 FullName = fullName,
                 Email = email,

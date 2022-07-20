@@ -1,0 +1,28 @@
+
+<div class="box">
+  <div class="title mt-5">
+    <h1 class="text-center">Alinea 5 puntos y gana</h1>
+  </div>
+  <div class="btn-box mt-5 text-center">
+    <button type="button" class="btn btn-primary btn-lg mr-5" [routerLink]="['/game/nubrcc']">Jugar solo</button>
+    <div class="btn-group" dropdown>
+      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg mr-5 dropdown-toggle">Jugar solo 
+        <span class="caret"></span></button>
+      <!-- <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+              aria-controls="dropdown-basic">
+        Button dropdown <span class="caret"></span>
+      </button> -->
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+          role="menu" aria-labelledby="button-basic">
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.One)">One</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Three)">Three</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Five)">Five</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Nine)">Nine</a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg mr-5">Invitar a un amigo</button>
+    <button type="button"  class="btn btn-outline-primary btn-lg" style="color: white; border-color: white;">Jugar con adversario aleatorio</button>
+  </div>
+</div>

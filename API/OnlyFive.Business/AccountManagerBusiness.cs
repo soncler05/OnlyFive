@@ -1,4 +1,5 @@
-﻿using OnlyFive.BusinessInterface;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlyFive.BusinessInterface;
 using OnlyFive.RepositoryInterface;
 using OnlyFive.Types.Models;
 using System;
@@ -12,10 +13,12 @@ namespace OnlyFive.Business
     public class AccountManagerBusiness : IAccountManagerBusiness
     {
         private readonly IAccountManagerRepository _repository;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountManagerBusiness(IAccountManagerRepository repository)
+        public AccountManagerBusiness(IAccountManagerRepository repository, SignInManager<ApplicationUser> signInManager)
         {
             _repository = repository;
+            _signInManager = signInManager;
         }
         public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
@@ -326,6 +329,12 @@ namespace OnlyFive.Business
             {
                 throw;
             }
+        }
+
+        public async Task<SignInResult> ExternalLogin( string providerKey)
+        {
+            var p = await _signInManager.ExternalLoginSignInAsync("Google", providerKey, false);
+            return p;
         }
     }
 }

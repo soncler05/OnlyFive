@@ -235,12 +235,16 @@ namespace OnlyFive.Repository.Migrations
 
             modelBuilder.Entity("OnlyFive.Types.Models.Game", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("GameRound")
+                        .HasColumnType("int");
 
                     b.Property<string>("GuestDevice")
                         .HasMaxLength(50)
@@ -249,6 +253,9 @@ namespace OnlyFive.Repository.Migrations
                     b.Property<string>("GuestId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("GuestScore")
+                        .HasColumnType("int");
+
                     b.Property<string>("HostDevice")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -256,11 +263,14 @@ namespace OnlyFive.Repository.Migrations
                     b.Property<string>("HostId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PawnMap")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HostScore")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UrlId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -269,6 +279,28 @@ namespace OnlyFive.Repository.Migrations
                     b.HasIndex("HostId");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("OnlyFive.Types.Models.Round", b =>
+                {
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Offset")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PawnMap")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("GameId", "Offset");
+
+                    b.ToTable("Rounds");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -339,6 +371,17 @@ namespace OnlyFive.Repository.Migrations
                     b.Navigation("Host");
                 });
 
+            modelBuilder.Entity("OnlyFive.Types.Models.Round", b =>
+                {
+                    b.HasOne("OnlyFive.Types.Models.Game", "Game")
+                        .WithMany("Rounds")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("OnlyFive.Types.Models.ApplicationRole", b =>
                 {
                     b.Navigation("Claims");
@@ -355,6 +398,11 @@ namespace OnlyFive.Repository.Migrations
                     b.Navigation("HostGames");
 
                     b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("OnlyFive.Types.Models.Game", b =>
+                {
+                    b.Navigation("Rounds");
                 });
 #pragma warning restore 612, 618
         }
