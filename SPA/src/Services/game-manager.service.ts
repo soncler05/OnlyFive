@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { nextTick } from 'process';
 import { Observable, Subject } from 'rxjs';
@@ -7,8 +8,9 @@ import { GameResultComponent } from 'src/app/game-result/game-result.component';
 import { GroundClass } from 'src/tools/GroundClass';
 import { Helper } from 'src/tools/Helper';
 import { Player } from 'src/tools/player';
-import { Game, GameRoundsEnum } from 'src/Types/Game';
+import { Game, GameRoundsEnum, Round } from 'src/Types/Game';
 import { GameService } from './http/game.service';
+import { RoundService } from './http/round.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,37 +20,35 @@ ground: GroundClass;
 game: Game;
 host: Player;
 guest: Player;
+actualRoundStartDate: Date;
 bsModalRef?: BsModalRef;
 actualUser = Helper.DEFAULT_PLAYER;
-constructor(private gameServ: GameService, private modalService: BsModalService) {}
+constructor(private gameServ: GameService, private roundServ: RoundService, private router: Router, private modalService: BsModalService) {
+}
 
-start(gameId: string, game?: Game): Subject<void> {
+start(gameId: string, game: Game): void {
+  this.game = game;
+  action(game, this.next.bind(this));
 
-  var obs = new Subject<void>();
-  
-  if(game) {
-    this.game = game;
-    action(game, this.next.bind(this));
-  } else {
-    this.gameServ.findByUrlId(gameId).subscribe(g => {
-      this.game = g
-      action(game, this.next.bind(this));
-    });
-
-  }
-
-  return obs;
   function action(game: Game, callback: any) {
-    
-    obs.next();
-    obs.complete();
-    callback();
+        callback();
   }
 }
 
 next(winner = null){
-  
-  if(winner) this.setScore(winner);
+  const now = new Date();
+  if(winner) {
+    this.setScore(winner)
+    this.gameServ.update(this.game);
+    this.roundServ.saveLast({
+      gameId: this.game.id,
+      offset: this.game.hostScore + this.game.guestScore,
+      startDate: this.actualRoundStartDate,
+      endDate: now,
+      pawnMap: JSON.stringify(this.ground.gamePin)
+    } as Round).subscribe();
+    alert(` ${winner.userName} ha completado un cinco!!!` );
+  };
   
   const gameNumber = this.game.hostScore + this.game.guestScore;
   this.host = Helper.AUTOMATIC_PLAYER //this.game.host;
@@ -61,8 +61,13 @@ next(winner = null){
     else
       this.ground.newGame();
   }
-  else this.openModalWithComponent(); //alert("Se acabó!")
+  else {
+    this.openModalWithComponent(); //alert("Se acabó!")
+    this.game.endDate = now;
+    this.gameServ.update(this.game).subscribe();
+  }
 
+  this.actualRoundStartDate = now;
 }
 
 private setScore(player: Player){

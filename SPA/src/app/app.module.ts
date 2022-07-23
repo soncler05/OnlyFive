@@ -32,6 +32,10 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NavComponent } from './nav/nav.component';
 import { GameConfigComponent } from './game-config/game-config.component';
 import { GameResultComponent } from './game-result/game-result.component';
+import { GameGuard } from 'src/security/game-guard';
+
+
+const GUARDS = [GameGuard];
 @NgModule({
   declarations: [							
     AppComponent,
@@ -108,8 +112,9 @@ import { GameResultComponent } from './game-result/game-result.component';
           console.error(err);
         }
       } as SocialAuthServiceConfig,
-    }
-
+    },
+    ...GUARDS
+    
   ],
   bootstrap: [AppComponent],
   entryComponents: [GameResultComponent]

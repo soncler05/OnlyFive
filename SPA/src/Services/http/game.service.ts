@@ -9,7 +9,7 @@ import { Game } from 'src/Types/Game';
 })
 export class GameService {
 private readonly PATH = `${environment.baseUrl}/game`;
-constructor( private httpClient: HttpClient, ) { }
+constructor( private httpClient: HttpClient ) { }
 
 
 public create(game: Game): Observable<Game> {

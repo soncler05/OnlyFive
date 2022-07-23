@@ -262,7 +262,6 @@ export class GroundClass {
         onChange: this.canvas.renderAll.bind(this.canvas),
         onComplete: function() {
             this.winningLine.setCoords();
-            alert(` ${playerTurn.userName} ha completado un cinco!!!` );
             this.next(playerTurn);
             
         }.bind(this),

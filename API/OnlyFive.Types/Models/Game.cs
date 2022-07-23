@@ -19,6 +19,7 @@ namespace OnlyFive.Types.Models
         public string GuestId { get; set; }
         public int HostScore { get; set; }
         public int GuestScore { get; set; }
+        public int LastRoundOffset { get; set; }
         public GameRoundsEnum GameRound   { get; set; }
 
         public virtual ApplicationUser Host { get; set; }

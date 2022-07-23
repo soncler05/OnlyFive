@@ -175,12 +175,18 @@ namespace OnlyFive
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod());
+            
+            if (env.IsDevelopment())
+                app.UseCors(builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            else
+                app.UseCors(builder => builder
+                    .WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
 
             app.UseIdentityServer();
             app.UseAuthorization();

@@ -7,6 +7,7 @@ namespace OnlyFive.RepositoryInterface
     {
         Task<Round> Create(Round entity);
         Task Update(Round entity);
+        Task<Round> Find(int gameId, int offset);
     }
 
 }

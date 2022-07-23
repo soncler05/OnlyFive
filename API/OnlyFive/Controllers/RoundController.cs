@@ -16,16 +16,10 @@ namespace OnlyFive.Controllers
             _roundService = roundService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RoundDTO round)
+        [HttpPut("last")]
+        public async Task<IActionResult> SaveLast([FromBody] RoundDTO round)
         {
-            round = await _roundService.Create(round);
-            return Ok(round);
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] RoundDTO round)
-        {
-            await _roundService.Update(round);
+            await _roundService.SaveLast(round);
             return Ok();
         }
     }

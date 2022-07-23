@@ -14,11 +14,8 @@ export class HomeGameComponent implements OnInit,AfterViewInit {
   isUp = true;
   game: Game;
   ground: GroundClass;
-  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService) { 
-    gameManagerServ.init();
-    var nav = this.router.getCurrentNavigation(); 
-    if(nav && nav.extras && nav.extras.state)
-      this.game = nav.extras.state as Game;
+  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService) {
+    this.game = gameManagerServ.game;
   }
   
 
@@ -27,26 +24,10 @@ export class HomeGameComponent implements OnInit,AfterViewInit {
   } 
 
 
-  ngOnInit() {
-    // let autoPlayer = Helper.AUTOMATIC_PLAYER;
-    // autoPlayer.currentTurn = true;
-    // this.ground = new GroundClass(
-    //   // {
-    //   //   userName: 'soncler05',
-    //   //   color: Helper.COLORS[1],
-    //   //   currentTurn: false,
-    //   //   name: 'CCVV',
-    //   //   playerId: Helper.uuidv4(),
-    //   //   device: ''
-    //   // }, 
-    //   autoPlayer,
-    //   Helper.DEFAULT_PLAYER
-    // )
-  }
+  ngOnInit() { }
   ngAfterViewInit(): void {
     const urlId = this.activatedRoute.snapshot.paramMap.get("urlId");
-    this.gameManagerServ.start(urlId, this.game).subscribe();
-      
+    this.gameManagerServ.start(urlId, this.game);
   }
   
   @HostListener('window:scroll', ['$event'])

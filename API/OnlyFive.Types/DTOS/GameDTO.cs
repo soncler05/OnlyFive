@@ -20,6 +20,7 @@ namespace OnlyFive.Types.DTOS
         public int HostScore { get; set; }
         public int GuestScore { get; set; }
         public GameRoundsEnum GameRound { get; set; }
+        public int LastRoundOffset { get; set; }
 
         public ApplicationUserDTO Host { get; set; }
         public ApplicationUserDTO Guest { get; set; }

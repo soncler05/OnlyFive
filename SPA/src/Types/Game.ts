@@ -17,13 +17,14 @@ export class Game {
     // guest: User;
     hostScore: number;
     guestScore: number;
+    lastRoundOffset: number;
 }
 export class Round {
     offset: number;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     pawnMap: string;
-    gameId: string;
+    gameId: number;
 }
 
 export enum GameRoundsEnum{

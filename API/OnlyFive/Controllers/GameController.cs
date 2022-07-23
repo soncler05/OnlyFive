@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlyFive.BusinessInterface;
 using OnlyFive.Types.DTOS;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,16 @@ namespace OnlyFive.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] GameDTO game)
         {
-            await _gameService.Update(game);
-            return Ok();
+            try
+            {
+                await _gameService.Update(game);
+                return Ok();
+            }
+            catch (Exception ex )
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int gameId)
@@ -47,7 +56,10 @@ namespace OnlyFive.Controllers
         public async Task<IActionResult> Find(string urlId)
         {
             var result = await _gameService.FindByUrlId(urlId);
-            return Ok(result);
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound();
         }
     }
 }

@@ -48,7 +48,9 @@ namespace ExampleAngularCore.ViewModels
                 .ForMember(d => d.Guest, map => map.MapFrom(o => o.Guest))
                 .ForMember(d => d.Rounds, map => map.MapFrom(o => o.Rounds));
 
-            CreateMap<GameDTO, Game>();
+            CreateMap<GameDTO, Game>()
+                .ForMember(des => des.Host, src => src.Ignore())
+                .ForMember(des => des.Guest, src => src.Ignore());
 
             //CreateMap<ApplicationRole, RoleViewModel>()
             //    .ForMember(d => d.Permissions, map => map.MapFrom(s => s.Claims))
