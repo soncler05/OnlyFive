@@ -7,6 +7,6 @@ namespace OnlyFive.BusinessInterface
     {
         Task<RoundDTO> Create(RoundDTO entity);
         Task Update(RoundDTO entity);
-        Task SaveLast(RoundDTO entity);
+        Task SaveLast(LastRoundDTO entity);
     }
 }

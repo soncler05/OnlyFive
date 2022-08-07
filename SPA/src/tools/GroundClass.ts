@@ -24,6 +24,7 @@ export class GroundClass {
     // height = 1600;
     // private sideUnit: number = 10; 
     private next: (winner) => void;
+    public onComplete: (winner) => void;
 
     private tmp: FabricJs.fabric.Object;
     private lastPin: FabricJs.fabric.Object;
@@ -36,11 +37,12 @@ export class GroundClass {
     /**
      *
      */
-    constructor(host: Player, guest: Player, next: (winner) => void) {
+    constructor(host: Player, guest: Player, next: (winner) => void, onComplete: (winner) => void) {
     
         this._host = host;
         this._guest = guest;
         this.next = next;
+        this.onComplete = onComplete;
         // this.setProfile();
         this.canvas = new  FabricJs.fabric.Canvas('c', 
         {
@@ -220,8 +222,10 @@ export class GroundClass {
         
     var alignPins = this._gamePin.isComplete(pin); 
     if (alignPins) {
-      this.addLine(alignPins[0], alignPins[alignPins.length-1], this.getPlayer(alignPins[0].playerId).color);
-      this._gamePin.isEnded = true;
+        const player = this.getPlayer(alignPins[0].playerId);
+        this.onComplete(player.userName);
+        this.addLine(alignPins[0], alignPins[alignPins.length-1], player.color);
+        this._gamePin.isEnded = true;
     }
 
     this._gamePin.changePlayer();

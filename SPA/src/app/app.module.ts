@@ -33,11 +33,13 @@ import { NavComponent } from './nav/nav.component';
 import { GameConfigComponent } from './game-config/game-config.component';
 import { GameResultComponent } from './game-result/game-result.component';
 import { GameGuard } from 'src/security/game-guard';
+import { GeneralModalComponent } from './general-modal/general-modal.component';
+import { ToastaModule } from 'ngx-toasta';
 
 
 const GUARDS = [GameGuard];
 @NgModule({
-  declarations: [							
+  declarations: [								
     AppComponent,
       HomeGameComponent,
       HomeComponent,
@@ -49,7 +51,8 @@ const GUARDS = [GameGuard];
       ChangePwdComponent,
       NavComponent,
       GameConfigComponent,
-      GameResultComponent
+      GameResultComponent,
+      GeneralModalComponent
    ],
   imports: [
     ReactiveFormsModule,
@@ -58,6 +61,7 @@ const GUARDS = [GameGuard];
     FormsModule,
     AngularFontAwesomeModule,
     AppRoutingModule,
+    ToastaModule.forRoot(),
     OAuthModule.forRoot({
       resourceServer:{
         allowedUrls: [environment.tokenUrl],
@@ -84,6 +88,7 @@ const GUARDS = [GameGuard];
     ConfigurationService,
     // AppTitleService,
     AppTranslationService,
+    AlertService,
     // NotificationService,
     // NotificationEndpoint,
     // AccountService,
@@ -117,6 +122,6 @@ const GUARDS = [GameGuard];
     
   ],
   bootstrap: [AppComponent],
-  entryComponents: [GameResultComponent]
+  entryComponents: [GameResultComponent, GeneralModalComponent]
 })
 export class AppModule { }

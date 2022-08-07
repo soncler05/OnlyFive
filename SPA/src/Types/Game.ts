@@ -26,6 +26,10 @@ export class Round {
     pawnMap: string;
     gameId: number;
 }
+export class LastRound {
+    round: Round;
+    game: Game;
+}
 
 export enum GameRoundsEnum{
     One = 1,

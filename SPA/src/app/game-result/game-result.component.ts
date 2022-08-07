@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Player } from 'src/tools/player';
 import { Game } from 'src/Types/Game';
@@ -16,9 +17,12 @@ result?: {
   actualUser: Player
 }
 
-  constructor(public bsModalRef: BsModalRef) { }
+  constructor(public bsModalRef: BsModalRef, private router: Router) { }
 
   ngOnInit() {
   }
 
+  backHome(){
+    this.router.navigate(['/']);
+  }
 }

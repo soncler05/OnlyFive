@@ -1,0 +1,29 @@
+{
+    "home": {
+        "WelcomeMsg": "¡Alinea 5 puntos y gana!",
+        "NotImplemented": "Está funcionalidad está en desarrollo.",
+        "options":{
+            "OnePlayer":"Jugar solo",     
+            "FriendPlayer":"Jugar con un amigo",     
+            "RandomPlayer":"Jugar con un adversario aleatorio",
+            "onePOptions": {
+                "One": "1 ronda",
+                "Three": "3 rondas",
+                "Five": "5 rondas",
+                "Nine": "9 rondas"
+            }     
+        }
+    },
+    "game": {
+        "RoundCompletedTitle": "Ronda completada",
+        "RoundCompletedMsg": "{{userName}} ha completado un cinco.",
+        "BackHome": "Página principal",
+        "Congrats": "¡Felicidades, ganaste!",
+        "Sorry": "Lástima, perdiste.",
+        "End": "Juego terminado"
+    },
+    "modal":{
+        "Confirm": "Confirmar",
+        "Cancel": "Cancelar"
+    }
+}

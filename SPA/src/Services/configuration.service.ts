@@ -170,7 +170,7 @@ export class ConfigurationService {
 
   public import(jsonValue: string) {
 
-    this.clearLocalChanges();
+    // this.clearLocalChanges();
 
     if (jsonValue) {
       const importValue: UserConfiguration = Utilities.JsonTryParse(jsonValue);

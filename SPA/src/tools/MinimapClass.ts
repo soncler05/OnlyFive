@@ -67,7 +67,6 @@ export class MinimapClass {
    //@ts-ignore
    this.minimap.backgroundImage._element = canvas;
    this.minimap.renderAll();
-   console.log('updated');
  }
 
  private initMinimap() {
@@ -101,7 +100,6 @@ export class MinimapClass {
 
    this.minimap.add(this.minimapView);
    setTimeout(() =>{
-     console.log('timeout')
      this.minimapView.set('top', this.ratioGeneral * (this.bigCanvas.height - this.device.height) / 2);
      this.minimapView.left = this.ratioGeneral * (this.bigCanvas.width - this.device.width) / 2;
 
@@ -152,7 +150,7 @@ export class MinimapClass {
 
 
   private setMinimapView() {
-   const center = this.minimapView.getCenterPoint(); console.log(center);
+   const center = this.minimapView.getCenterPoint();
    const designInitPoint = {x:((center.x - this.viewPortMiniMap.width/2)/this.ratioGeneral),
      y:((center.y - this.viewPortMiniMap.height/2)/this.ratioGeneral)};
      this.bigCanvas.absolutePan(designInitPoint as FabricJs.fabric.Point);   

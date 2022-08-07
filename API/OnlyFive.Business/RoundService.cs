@@ -28,17 +28,15 @@ namespace OnlyFive.Business
         {
             await _repository.Update(_mapper.Map<Round>(entity));
         }
-        public async Task SaveLast(RoundDTO entity)
+        public async Task SaveLast(LastRoundDTO entity)
         {
-            var roundInDb = await _repository.Find(entity.GameId, entity.Offset);
+            var roundInDb = await _repository.Find(entity.Round.GameId, entity.Round.Offset);
             if (roundInDb == null)
-                await Create(entity);
+                await Create(entity.Round);
             else
                 await _repository.Update(roundInDb);
 
-            var game = await _gameRepository.Find(entity.GameId);
-            game.LastRoundOffset = entity.Offset;
-            await _gameRepository.Update(game);
+             await _gameRepository.Update(_mapper.Map<Game>(entity.Game));
         }
     }
 }

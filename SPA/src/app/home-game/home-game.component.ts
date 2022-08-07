@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppTranslationService } from 'src/Services/app-translation.service';
 import { GameManagerService } from 'src/Services/game-manager.service';
 import { GroundClass } from 'src/tools/GroundClass';
 import { Helper } from "src/tools/Helper";
@@ -14,8 +15,9 @@ export class HomeGameComponent implements OnInit,AfterViewInit {
   isUp = true;
   game: Game;
   ground: GroundClass;
-  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService) {
+  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService) {
     this.game = gameManagerServ.game;
+    
   }
   
 

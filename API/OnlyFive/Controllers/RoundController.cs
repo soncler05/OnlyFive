@@ -17,7 +17,7 @@ namespace OnlyFive.Controllers
         }
 
         [HttpPut("last")]
-        public async Task<IActionResult> SaveLast([FromBody] RoundDTO round)
+        public async Task<IActionResult> SaveLast([FromBody] LastRoundDTO round)
         {
             await _roundService.SaveLast(round);
             return Ok();
