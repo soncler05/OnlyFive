@@ -51,11 +51,19 @@ export class NavComponent implements OnInit {
   }
    
   public editUserName(){
+    const maxLength = 20;
+    const minLength = 3;
     this.alertService.showDialog("Editar", DialogType.prompt, (val =>  {
-      this.localStorage.savePermanentData(val, DBkeys.CURRENT_USER);
-      Helper.DEFAULT_PLAYER.userName = val;
-      this.game.guest.userName = val;
-      this.alertService.showStickyMessage(val, "", MessageSeverity.info);
+      val = val.trim();
+      if(val.length >= minLength && val.length <= maxLength){
+        this.localStorage.savePermanentData(val, DBkeys.CURRENT_USER);
+        Helper.DEFAULT_PLAYER.userName = val;
+        this.game.guest.userName = val;
+        this.alertService.showMessage(val, "", MessageSeverity.success);
+      } else{
+        this.alertService.showMessage("Error", "No se guardó", MessageSeverity.error);
+
+      }
     }));
   }
 

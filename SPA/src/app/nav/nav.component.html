@@ -10,7 +10,7 @@
   <span *ngIf="game">({{game.lastRoundOffset + '/' + game.gameRound}})
     <span>{{game.host.userName}} <span class="score" [ngStyle]="{'background-color':game.host.color}">{{hostScore}}</span></span>
     <span>&nbsp; - &nbsp;</span>
-    <span><span class="score" [ngStyle]="{'background-color':game.guest.color}">{{guestScore}}</span> {{game.guest.userName}} <a (click)="editUserName()"><i class="fa fa-pencil"></i></a></span>
+    <span><span class="score" [ngStyle]="{'background-color':game.guest.color}">{{guestScore}}</span> {{game.guest.userName}} <a class="edit-username" (click)="editUserName()"><i class="fa fa-pencil"></i></a></span>
   </span>
   <!-- <span>
     <a class="nav-link" [routerLink]="['/game']" style="color: white;">Game Home

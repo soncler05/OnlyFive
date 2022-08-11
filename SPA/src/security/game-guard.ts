@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Observable, Subject } from "rxjs";
 import { map, tap } from "rxjs/operators";
+import { AlertService, DialogType } from "src/Services/alert.service";
+import { AppTranslationService } from "src/Services/app-translation.service";
 import { GameManagerService } from "src/Services/game-manager.service";
 import { GameService } from "src/Services/http/game.service";
 import { Helper } from "src/tools/Helper";
@@ -15,7 +17,8 @@ export class GameGuard implements CanActivate {
         return this.game.endDate ? true : false; 
     }
     
-    constructor(private gameServ: GameService, private gameManagerServ: GameManagerService, private router: Router) {
+    constructor(private gameServ: GameService, private gameManagerServ: GameManagerService, private router: Router, private appTranslationServ: AppTranslationService,
+        private alertService: AlertService) {
        
     }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
@@ -34,9 +37,10 @@ export class GameGuard implements CanActivate {
         if(!this.ended){
             return true;
         } else {
-            alert("Ya se acabó");
-            this.router.navigate(['/']); 
-            return false;
+            this.alertService.showDialog(this.appTranslationServ.getTranslation("game:End"), DialogType.alert, () => {
+                this.router.navigate(['/']); 
+                return false;
+            })
         }
     }
 }

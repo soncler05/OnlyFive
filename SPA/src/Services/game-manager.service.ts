@@ -44,13 +44,16 @@ next(winner = null){
   if(winner) {
     this.setScore(winner)
     this.gameServ.update(this.game);
+    var gamePin = Object.assign({}, this.ground.gamePin);
+    // @ts-ignore
+    gamePin._canvas = undefined;
     this.roundServ.saveLast({
       round: {
       gameId: this.game.id,
       offset: this.game.lastRoundOffset,
       startDate: this.actualRoundStartDate,
       endDate: now,
-      pawnMap: JSON.stringify(this.ground.gamePin)
+      pawnMap: JSON.stringify(gamePin)
     } as Round,
     game: Object.assign({}, this.game)
   }).subscribe();
@@ -106,7 +109,8 @@ openModalWithComponent() {
   this.bsModalRef.content.closeBtnName = 'Close';
 }
 private openRoundCompletedModal(userName: string  ) {
-  this.alertService.showMessage(this.translateServ.getTranslation('game.RoundCompletedTitle'), this.translateServ.getTranslation('game.RoundCompletedMsg', {userName: userName}), MessageSeverity.success);
+  this.alertService.showMessage(this.translateServ.getTranslation('game.RoundCompletedTitle'), 
+    this.translateServ.getTranslation('game.RoundCompletedMsg', {userName: userName}), this.actualUser.userName === userName ? MessageSeverity.success : MessageSeverity.error);
   // const initialState: ModalOptions = {
   //   initialState: {
   //     content: {
