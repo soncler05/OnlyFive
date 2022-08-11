@@ -212,7 +212,7 @@ export class RealGamePin {
         //fourPins --automaticPlayer
         isValidAutoFourPinGroups = isValidAutoFourPinGroups.length > 0 ? isValidAutoFourPinGroups : this.mapToIsGroupValid(this.filterPins(this._fourPins, Helper.AUTOMATIC_PLAYER.playerId));
         if(isValidAutoFourPinGroups.length > 0) {
-          this.processSmartPlay(isValidAutoFourPinGroups, this._fourPins, this.action_smartPlay.bind(this),
+          this.processSmartPlay(isValidAutoFourPinGroups, this._fourPins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -231,7 +231,7 @@ export class RealGamePin {
         //fourPins --player
         isValidPlayerFourPinGroups = isValidPlayerFourPinGroups.length > 0 ? isValidPlayerFourPinGroups : this.mapToIsGroupValid(this.filterPins(this._fourPins, this._playerNotTurn.playerId));
         if(isValidPlayerFourPinGroups.length > 0) {
-          this.processSmartPlay(isValidPlayerFourPinGroups, this._fourPins, this.action_smartPlay.bind(this),
+          this.processSmartPlay(isValidPlayerFourPinGroups, this._fourPins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -250,7 +250,7 @@ export class RealGamePin {
         //threePins --automaticPlayer
         isValidAutoThreePinGroups = isValidAutoThreePinGroups.length > 0 ? isValidAutoThreePinGroups : this.mapToIsGroupValid(this.filterPins(this._threePins, Helper.AUTOMATIC_PLAYER.playerId));
         if(isValidAutoThreePinGroups.length > 0) {
-            this.processSmartPlay(isValidAutoThreePinGroups, this._threePins, this.action_smartPlay.bind(this),
+            this.processSmartPlay(isValidAutoThreePinGroups, this._threePins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -273,7 +273,7 @@ export class RealGamePin {
           if(!isValidPlayerThreePinGroups.some(g => g.isGroupValid.start && g.isGroupValid.end))
             if(this.subtituteAction_smartPlay(isValidPlayerTwoPinGroups, this._twoPins, 3, this._playerNotTurn.playerId, true)) return;
           
-          this.processSmartPlay(isValidPlayerThreePinGroups, this._threePins, this.action_smartPlay.bind(this),
+          this.processSmartPlay(isValidPlayerThreePinGroups, this._threePins,
           isValidAutoFourPinGroups,
           isValidAutoThreePinGroups,
           isValidAutoTwoPinGroups,
@@ -292,7 +292,7 @@ export class RealGamePin {
         //twoPins --automaticPlayer
         isValidAutoTwoPinGroups = isValidAutoTwoPinGroups.length > 0 ? isValidAutoTwoPinGroups : this.mapToIsGroupValid(this.filterPins(this._twoPins, Helper.AUTOMATIC_PLAYER.playerId));
         if(isValidAutoTwoPinGroups.length > 0) {
-            this.processSmartPlay(isValidAutoTwoPinGroups, this._twoPins, this.action_smartPlay.bind(this),
+            this.processSmartPlay(isValidAutoTwoPinGroups, this._twoPins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -308,7 +308,7 @@ export class RealGamePin {
         //twoPins --player
         isValidPlayerTwoPinGroups = isValidPlayerTwoPinGroups.length > 0 ? isValidPlayerTwoPinGroups : this.mapToIsGroupValid(this.filterPins(this._twoPins, this._playerNotTurn.playerId));
         if(isValidPlayerTwoPinGroups.length > 0) {
-            this.processSmartPlay(isValidPlayerTwoPinGroups, this._twoPins, this.action_smartPlay.bind(this),
+            this.processSmartPlay(isValidPlayerTwoPinGroups, this._twoPins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -324,7 +324,7 @@ export class RealGamePin {
         //onePins --automaticPlayer
         isValidAutoOnePinGroups = isValidAutoOnePinGroups.length > 0 ? isValidAutoOnePinGroups : this.mapToIsGroupValid(this.filterPins(this._onePins, Helper.AUTOMATIC_PLAYER.playerId));
         if(isValidAutoOnePinGroups.length > 0) {
-            this.processSmartPlay(isValidAutoOnePinGroups, this._onePins, this.action_smartPlay.bind(this),
+            this.processSmartPlay(isValidAutoOnePinGroups, this._onePins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -340,7 +340,7 @@ export class RealGamePin {
         //onePins --player
         isValidPlayerOnePinGroups = isValidPlayerOnePinGroups.length > 0 ? isValidPlayerOnePinGroups : this.mapToIsGroupValid(this.filterPins(this._onePins, this._playerNotTurn.playerId));
         if(isValidPlayerOnePinGroups.length > 0) {
-          this.processSmartPlay(isValidPlayerOnePinGroups, this._onePins, this.action_smartPlay.bind(this),
+          this.processSmartPlay(isValidPlayerOnePinGroups, this._onePins,
             isValidAutoFourPinGroups,
             isValidAutoThreePinGroups,
             isValidAutoTwoPinGroups,
@@ -354,18 +354,16 @@ export class RealGamePin {
         }
     
         this.playLastPin();
-    
-    
       }
 
-      private processSmartPlay(isValidPinGroups, bigGroup, callBack?, isValidAutoFourPinGroups?,
-        isValidAutoThreePinGroups?,
-        isValidAutoTwoPinGroups?,
-        isValidAutoOnePinGroups?,
-        isValidPlayerFourPinGroups?,
-        isValidPlayerThreePinGroups?,
-        isValidPlayerTwoPinGroups?,
-        isValidPlayerOnePinGroups?) {
+      private processSmartPlay(isValidPinGroups: IsValidGroup[], bigGroup: PinGroup[], isValidAutoFourPinGroups?: IsValidGroup[],
+        isValidAutoThreePinGroups?: IsValidGroup[],
+        isValidAutoTwoPinGroups?: IsValidGroup[],
+        isValidAutoOnePinGroups?: IsValidGroup[],
+        isValidPlayerFourPinGroups?: IsValidGroup[],
+        isValidPlayerThreePinGroups?: IsValidGroup[],
+        isValidPlayerTwoPinGroups?: IsValidGroup[],
+        isValidPlayerOnePinGroups?: IsValidGroup[]) {
 
         let additionalGroupPin;
       
@@ -402,10 +400,8 @@ export class RealGamePin {
             );
           const oneWayValidPins = validPins.filter(x => !twoWaysValidPins.find(y => y === x ));
           const orderedPins = [...twoWaysValidPins, ...oneWayValidPins];
-        console.log(orderedPins);
           if(orderedPins.length > 0) {
             let isValidGroupToPlay;
-            // let isValidGroupToPlay = orderedPins.find(x => x.isGroupValid.startAdditionalPins === additionalGroupPin || x.isGroupValid.endAdditionalPins === additionalGroupPin);
       
             for (let index = 0; index < additionalGroupPin; index++) {
               if (isValidGroupToPlay) break;
@@ -416,7 +412,7 @@ export class RealGamePin {
       
             this.processGroupToPlay(isValidGroupToPlay.isGroupValid, isValidGroupToPlay.group);
           } else {
-            callBack(
+            this.action_smartPlay(
                 isValidAutoFourPinGroups,
                 isValidAutoThreePinGroups,
                 isValidAutoTwoPinGroups,
@@ -459,7 +455,7 @@ export class RealGamePin {
         this.play(endPin);
         return;
         }
-        console.log('error: processGroupToPlay');
+        console.error('error: processGroupToPlay');
     }
 
     private subtituteAction_smartPlay(isValidGroup: IsValidGroup[], bigGroup: PinGroup[], alignPinNumber: number, playerId: string, twoSide = false) {
@@ -477,7 +473,12 @@ export class RealGamePin {
         }
     
         isValidGroup = isValidGroup.length > 0 ? isValidGroup : this.mapToIsGroupValid(this.filterPins(bigGroup, playerId));
-      const isValidAutoThreeMoreOnePinGroups = isValidGroup.filter(x => x.isGroupValid.result && (!twoSide || (x.isGroupValid.start && x.isGroupValid.end)) &&
+      const isValidAutoThreeMoreOnePinGroups = isValidGroup.filter(x => x.isGroupValid.result && 
+   
+        (!twoSide || 
+          ((!x.isGroupValid.start || this.isLastPlaceFree(x.isGroupValid.startPattern)) && 
+          (!x.isGroupValid.end || this.isLastPlaceFree(x.isGroupValid.endPattern))) &&
+          (x.isGroupValid.start && x.isGroupValid.end)) &&
         (this.sumPattern(x.isGroupValid.startPattern) === alignPinNumber || this.sumPattern(x.isGroupValid.endPattern) === alignPinNumber));
       
       if(isValidAutoThreeMoreOnePinGroups.length > 0) {
@@ -488,6 +489,11 @@ export class RealGamePin {
     
       }
       
+    }
+
+    private isLastPlaceFree(pattern: number[]): boolean{
+      const result =  pattern[pattern.length - 1] == 0;
+      return result;
     }
 
     private playRandom(pinGroup) {

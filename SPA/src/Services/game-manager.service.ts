@@ -110,25 +110,7 @@ openModalWithComponent() {
 }
 private openRoundCompletedModal(userName: string  ) {
   this.alertService.showMessage(this.translateServ.getTranslation('game.RoundCompletedTitle'), 
-    this.translateServ.getTranslation('game.RoundCompletedMsg', {userName: userName}), this.actualUser.userName === userName ? MessageSeverity.success : MessageSeverity.error);
-  // const initialState: ModalOptions = {
-  //   initialState: {
-  //     content: {
-  //       title: this.translateServ.getTranslation('game.RoundCompletedTitle'),
-  //       msg: this.translateServ.getTranslation('game.RoundCompletedMsg', {userName: userName}),
-  //       btnConfirm: {
-  //         text: "OK",
-  //         // action: () => { 
-           
-  //         // }
-  //       },
-  //       canClose: false,
-  //     }
-      
-  //   } as Partial<Object>, ignoreBackdropClick: true
-  // };
-
-  // this.bsModalRef = this.modalService.show(GeneralModalComponent, initialState);
+  this.translateServ.getTranslation('game.RoundCompletedMsg', {userName: userName}), this.actualUser.userName === userName ? MessageSeverity.success : MessageSeverity.error);
 }
 
   init(){
