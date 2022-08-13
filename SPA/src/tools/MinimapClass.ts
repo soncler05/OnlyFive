@@ -5,7 +5,7 @@ export class MinimapClass {
     private bigCanvas: FabricJs.fabric.Canvas;
     private minimap: FabricJs.fabric.Canvas;
     private minimapView;
-    private readonly ratioGeneral = 0.05;
+    private readonly ratioGeneral = 0.06;
     private viewPortMiniMap: {width: number, height: number};
     
     /**
@@ -27,11 +27,6 @@ export class MinimapClass {
         };
         this.initMinimap();
         this.initialBehavior();
-        // setTimeout(() => {
-        //   // this.updateMiniMap.bind(this);
-        //   // //@ts-ignore
-        //   // this.bigCanvas.setCoords();
-        // }, 100);
     }
     
 
@@ -41,8 +36,9 @@ export class MinimapClass {
      this.device = { width: window.innerWidth, height: window.innerHeight };
    }
    
- 
- 
+ clear(){
+  this.minimap.clear();
+ }
 
  private setWidthHeightMini()  {
    this.minimap.setWidth(this.bigCanvas.width * this.ratioGeneral);
@@ -71,7 +67,6 @@ export class MinimapClass {
    //@ts-ignore
    this.minimap.backgroundImage._element = canvas;
    this.minimap.renderAll();
-   console.log('updated');
  }
 
  private initMinimap() {
@@ -80,8 +75,8 @@ export class MinimapClass {
    }
    var canvas = this.createCanvasEl();
    var backgroundImage = new FabricJs.fabric.Image(canvas);
-   backgroundImage.scaleX = 1 //(1 + (minimap.width/design.width)) / design.getRetinaScaling();
-   backgroundImage.scaleY = 1 // (1 + (minimap.height/design.height)) / design.getRetinaScaling();
+   backgroundImage.scaleX = 1;
+   backgroundImage.scaleY = 1;
    // minimap.centerObject(backgroundImage);
    this.minimap.backgroundColor = 'white';
    this.minimap.backgroundImage = backgroundImage;
@@ -89,8 +84,8 @@ export class MinimapClass {
    this.minimapView = new FabricJs.fabric.Rect({
      top: 0,
      left: 0,
-     width: this.ratioGeneral * this.device.width, //backgroundImage.width / design.getRetinaScaling(),
-     height: this.ratioGeneral * this.device.height, //backgroundImage.height/ design.getRetinaScaling(),
+     width: this.ratioGeneral * this.device.width, 
+     height: this.ratioGeneral * this.device.height,
      fill: 'rgba(0, 0, 255, 0.3)',
      cornerSize: 6,
      transparentCorners: false,
@@ -101,11 +96,10 @@ export class MinimapClass {
    //   br: fabric.Object.prototype.controls.br,
    };
 
-   this.minimapView.on('modified', this.setMinimapView.bind(this));
+   this.minimapView.on('moving', this.setMinimapView.bind(this));
 
    this.minimap.add(this.minimapView);
    setTimeout(() =>{
-     console.log('timeout')
      this.minimapView.set('top', this.ratioGeneral * (this.bigCanvas.height - this.device.height) / 2);
      this.minimapView.left = this.ratioGeneral * (this.bigCanvas.width - this.device.width) / 2;
 
@@ -115,8 +109,6 @@ export class MinimapClass {
      this.setMinimapView();
    }, 1)
  }
-
- // var debouncedMiniMap = _.debounce(updateMiniMap, 2500);
 
  initialBehavior()
  {
@@ -158,18 +150,14 @@ export class MinimapClass {
 
 
   private setMinimapView() {
-   const center = this.minimapView.getCenterPoint(); console.log(center);
+   const center = this.minimapView.getCenterPoint();
    const designInitPoint = {x:((center.x - this.viewPortMiniMap.width/2)/this.ratioGeneral),
      y:((center.y - this.viewPortMiniMap.height/2)/this.ratioGeneral)};
-     this.bigCanvas.absolutePan(designInitPoint as FabricJs.fabric.Point);
-   // design.renderAll();
-   // minimap.renderAll();
-   
-   
+     this.bigCanvas.absolutePan(designInitPoint as FabricJs.fabric.Point);   
   }
 
   onResize() {
-    
+    this.setWidthHeightMini();
     this.setMinimapView();
     
     this.setDevice();

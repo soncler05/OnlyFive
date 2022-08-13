@@ -10,9 +10,17 @@ namespace OnlyFive
     public class IdentityServerConfig
     {
         public const string ApiName = "quickapp_api";
-        public const string ApiFriendlyName = "ExampleAngularCore API";
+        public const string ApiFriendlyName = "OnlyFive";
         public const string QuickAppClientID = "quickapp_spa";
         public const string SwaggerClientID = "swaggerui";
+
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
+            {
+                new ApiScope(ApiName)
+            };
+        }
 
         // Identity resources (used by UserInfo endpoint).
         public static IEnumerable<IdentityResource> GetIdentityResources()
@@ -34,11 +42,21 @@ namespace OnlyFive
             {
                 new ApiResource(ApiName) {
                     UserClaims = {
+                        //IdentityServerConstants.StandardScopes.Profile,
                         JwtClaimTypes.Name,
                         JwtClaimTypes.Email,
                         JwtClaimTypes.PhoneNumber,
                         JwtClaimTypes.Role,
                         ClaimConstants.Permission
+                    },
+                    Scopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        IdentityServerConstants.StandardScopes.Email,
+                        ScopeConstants.Roles,
+                        ApiName
                     }
                 }
             };
@@ -47,6 +65,8 @@ namespace OnlyFive
         // Clients want to access resources.
         public static IEnumerable<Client> GetClients()
         {
+            var allowedGrantTypes = new List<string>(GrantTypes.ResourceOwnerPassword);
+            allowedGrantTypes.Add("external");
             // Clients credentials.
             return new List<Client>
             {
@@ -54,7 +74,7 @@ namespace OnlyFive
                 new Client
                 {
                     ClientId = IdentityServerConfig.QuickAppClientID,
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword, // Resource Owner Password Credential grant.
+                    AllowedGrantTypes = allowedGrantTypes, //GrantTypes.ResourceOwnerPassword, // Resource Owner Password Credential grant.
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false, // This client does not need a secret to request tokens from the token endpoint.
                     
@@ -85,8 +105,8 @@ namespace OnlyFive
                     AllowedScopes = {
                         ApiName
                     }
-                }
+                },
             };
         }
     }
-}
+} 

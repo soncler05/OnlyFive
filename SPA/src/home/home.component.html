@@ -1,0 +1,38 @@
+
+<div class="box">
+
+  <div class="text-right">
+    <div class="btn-group" dropdown>
+      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg dropdown-toggle btn-sm">{{currentLanguage}}
+        <span class="caret"></span></button>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+          role="menu" aria-labelledby="button-basic">
+        <li role="menuitem"><a class="dropdown-item" (click) = "setLanguage('en')">en</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "setLanguage('es')">es</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "setLanguage('fr')">fr</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "setLanguage('ht')">ht</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="title mt-5">
+    <h1 class="text-center" [translate]="'home.WelcomeMsg'"></h1>
+  </div>
+  <div class="btn-box mt-5 text-center">
+    <div class="btn-group" dropdown>
+      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg mr-5 dropdown-toggle">
+        {{'home.options.OnePlayer' | translate}}<span class="caret"></span></button>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+          role="menu" aria-labelledby="button-basic">
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.One)">{{'home.options.onePOptions.One' | translate}}</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Three)">{{'home.options.onePOptions.Three' | translate}}</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Five)">{{'home.options.onePOptions.Five' | translate}}</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playByMySelf(gameTypes.Nine)">{{'home.options.onePOptions.Nine' | translate}}</a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg mr-5" (click)="playWithAFriend()">{{'home.options.FriendPlayer' | translate}}</button>
+    <button type="button"  class="btn btn-outline-primary btn-lg" (click)="playWithARandomPlayer()" style="color: white; border-color: white;">{{'home.options.RandomPlayer' | translate}}</button>
+  </div>
+</div>

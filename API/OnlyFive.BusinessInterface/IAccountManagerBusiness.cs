@@ -1,4 +1,5 @@
-﻿using OnlyFive.Types.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlyFive.Types.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace OnlyFive.BusinessInterface
 {
     public interface IAccountManagerBusiness
     {
+        Task<SignInResult> ExternalLogin(string providerKey);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
         Task<(bool Succeeded, string[] Errors)> CreateRoleAsync(ApplicationRole role, IEnumerable<string> claims);
         Task<(bool Succeeded, string[] Errors)> CreateUserAsync(ApplicationUser user, IEnumerable<string> roles, string password);

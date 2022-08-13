@@ -1,0 +1,29 @@
+{
+    "home": {
+        "WelcomeMsg": "Jwèt mòpyon, alinye 5 pwen pou w ka genyen!",
+        "NotImplemented": "Fonksyonalite sa a poko disponib.",
+        "options":{
+            "OnePlayer":"Jwe pou kont mwen",     
+            "FriendPlayer":"Jwe ak  yon zanmi",     
+            "RandomPlayer":"Jwe ak yon advèsè aleyatwa.",
+            "onePOptions": {
+                "One": "1 pati",
+                "Three": "3 pati",
+                "Five": "5 pati",
+                "Nine": "9 pati"
+            }     
+        }
+    },
+    "game": {
+        "RoundCompletedTitle": "Pati a fini",
+        "RoundCompletedMsg": "{{userName}} konplete yon 5.",
+        "BackHome": "Paj prensipal",
+        "Congrats": "Felisitasyon, ou genyen!",
+        "Sorry": "Dezole, ou pèdi!",
+        "End": "Jwèt la fini"
+    },
+    "modal":{
+        "Confirm": "Konfime",
+        "Cancel": "Anile"
+    }
+}

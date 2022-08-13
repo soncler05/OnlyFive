@@ -13,6 +13,7 @@ namespace OnlyFive.Repository
     {
         public string CurrentUserId { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Round> Rounds { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -35,6 +36,9 @@ namespace OnlyFive.Repository
             builder.Entity<Game>().HasOne(g => g.Guest).WithMany(u => u.GuestGames).HasForeignKey(x => x.GuestId).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Game>().Property(g => g.HostDevice).HasMaxLength(50);
             builder.Entity<Game>().Property(g => g.GuestDevice).HasMaxLength(50);
+
+            builder.Entity<Round>().HasOne(g => g.Game).WithMany(u => u.Rounds).HasForeignKey(x => x.GameId).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Round>().HasKey(g => new { g.GameId, g.Offset });
 
 
             //builder.Entity<Customer>().Property(c => c.Name).IsRequired().HasMaxLength(100);

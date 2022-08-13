@@ -1,0 +1,19 @@
+<div id="logreg-forms">
+  <form class="form-signin" [formGroup]="form">
+      <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
+      <div class="social-login">
+          <button class="btn facebook-btn social-btn" (click)="externalLogin('facebook')" type="button"><span><i class="fab fa-facebook-f"></i> Sign in with Facebook</span> </button>
+          <button class="btn google-btn social-btn" (click)="externalLogin('google')" type="button"><span><i class="fab fa-google-plus-g"></i> Sign in with Google+</span> </button>
+      </div>
+      <p style="text-align:center"> OR  </p>
+      <input type="text" id="username" class="form-control" placeholder="username" formControlName="userName" autofocus="">
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password">
+      
+      <button class="btn btn-success btn-block" (click)="login()"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+
+      <a href id="forgot_pswd" (click)="$event.stopPropagation();leaveMode(accountModeEnum.resetPwd)">Forgot password?</a>
+      <hr>
+      <!-- <p>Don't have an account!</p>  -->
+      <button class="btn btn-primary btn-block" (click)="leaveMode(accountModeEnum.signUp)" type="button" id="btn-signup"><i class="fas fa-user-plus"></i> Sign up New Account</button>
+      </form>
+</div>

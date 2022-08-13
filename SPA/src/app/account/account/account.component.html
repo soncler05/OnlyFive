@@ -1,0 +1,4 @@
+<app-sign-in *ngIf="mode == accountModes.signIn" (changeMode)="onChangeMode($event)"></app-sign-in>
+<app-sign-up *ngIf="mode == accountModes.signUp"></app-sign-up>
+<app-change-pwd *ngIf="mode == accountModes.changePwd"></app-change-pwd>
+<app-reset-pwd *ngIf="mode == accountModes.resetPwd"></app-reset-pwd>
