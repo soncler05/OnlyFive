@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{content.title}}</h4>
+  <button *ngIf="content.canClose" type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true" class="visually-hidden">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  {{content.msg}}
+</div>
+<div class="modal-footer">
+  <button type="button" *ngIf="!content.btnConfirm?.visible ? true : content.btnConfirm.visible" class="btn {{!content.btnConfirm?.class ? 'btn-primary' :  content.btnConfirm.class }}" 
+    (click)="bsModalRef.hide(); execute(content.btnConfirm?.action)">{{!content.btnConfirm?.text ? 'Confirm' :  content.btnConfirm.text }}</button>
+  <button type="button" *ngIf="content.btnCancel?.visible" class="btn {{!content.btnCancel?.class ? 'btn-danger' :  content.btnCancel.class }}" 
+    (click)="bsModalRef.hide(); content.btnCancel?.action()">{{!content.btnCancel?.text ? 'Cancel' :  content.btnCancel.text }}</button>
+</div>

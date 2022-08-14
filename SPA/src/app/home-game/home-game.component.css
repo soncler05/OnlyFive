@@ -1,0 +1,39 @@
+
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 8px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  #up-down {
+    padding: 2px 10px 5px 10px; 
+    color: #db5353; 
+    background: #003f81; 
+    display: inline-block; 
+    border-radius: 0% 0% 50% 50% / 0 0 100% 100%;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+  }
+
+
+
+.box {
+    width: 200px !important;
+    height: 30px !important;
+    color: white;
+}
+.mini {
+    border: 1px solid blue;
+    position: fixed !important;
+    top: 20px;
+    left: 20px;
+}

@@ -1,0 +1,29 @@
+{
+    "home": {
+        "WelcomeMsg": "Aligne 5 points pour gagner! ",
+        "NotImplemented": "Bientôt disponible",
+        "options":{
+            "OnePlayer":"Jouer seul",     
+            "FriendPlayer":"Jouer avec un ami",     
+            "RandomPlayer":"Jouer avec un adversaire aléatoire",
+            "onePOptions": {
+                "One": "1 partie",
+                "Three": "3 parties",
+                "Five": "5 parties",
+                "Nine": "9 parties"
+            }     
+        }
+    },
+    "game": {
+        "RoundCompletedTitle": "Partie terminée",
+        "RoundCompletedMsg": "{{userName}} a completé un 5.",
+        "BackHome": "Page principale",
+        "Congrats": "Félicitations, tu as gagné!",
+        "Sorry": "Désolé, t'as perdu.",
+        "End": "Jeu terminé"
+    },
+    "modal":{
+        "Confirm": "Confirmer",
+        "Cancel": "Annuler"
+    }
+}

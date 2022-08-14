@@ -69,6 +69,7 @@ namespace OnlyFive.Controllers
         [ProducesResponseType(200, Type = typeof(UserViewModel))]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
+        [Authorize(Roles = Constants.ROLE_ADMIN)]
         public async Task<IActionResult> GetUserByUserName(string userName)
         {
             ApplicationUser appUser = await _accountManager.GetUserByUserNameAsync(userName);
@@ -86,6 +87,7 @@ namespace OnlyFive.Controllers
         [HttpGet("users")]
         //[Authorize(Authorization.Policies.ViewAllUsersPolicy)]
         [ProducesResponseType(200, Type = typeof(List<UserViewModel>))]
+        [Authorize(Roles = Constants.ROLE_ADMIN)]
         public async Task<IActionResult> GetUsers()
         {
             return await GetUsers(-1, -1);
@@ -95,6 +97,7 @@ namespace OnlyFive.Controllers
         [HttpGet("users/{pageNumber:int}/{pageSize:int}")]
         //[Authorize(Authorization.Policies.ViewAllUsersPolicy)]
         [ProducesResponseType(200, Type = typeof(List<UserViewModel>))]
+        [Authorize(Roles = Constants.ROLE_ADMIN)]
         public async Task<IActionResult> GetUsers(int pageNumber, int pageSize)
         {
             var usersAndRoles = await _accountManager.GetUsersAndRolesAsync(pageNumber, pageSize);
@@ -204,6 +207,7 @@ namespace OnlyFive.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateCurrentUser([FromBody] JsonPatchDocument<UserPatchViewModel> patch)
         {
+
             return await UpdateUser(Utilities.GetUserId(this.User), patch);
         }
 
@@ -253,13 +257,14 @@ namespace OnlyFive.Controllers
 
         [HttpPost("users")]
         //[Authorize(Authorization.Policies.ManageAllUsersPolicy)]
+        [AllowAnonymous]
         [ProducesResponseType(201, Type = typeof(UserViewModel))]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> Register([FromBody] UserEditViewModel user)
         {
-            if (!(await _authorizationService.AuthorizeAsync(this.User, (user.Roles, new string[] { }), Policies.AssignAllowedRolesPolicy)).Succeeded)
-                return new ChallengeResult();
+            //if (!(await _authorizationService.AuthorizeAsync(this.User, (user.Roles, new string[] { }), Policies.AssignAllowedRolesPolicy)).Succeeded)
+            //    return new ChallengeResult();
 
 
             if (ModelState.IsValid)
@@ -526,6 +531,17 @@ namespace OnlyFive.Controllers
         //{
         //    return Ok(_mapper.Map<List<PermissionViewModel>>(ApplicationPermissions.AllPermissions));
         //}
+
+
+        [HttpGet("externalAuth/{providerKey}")]
+        [AllowAnonymous]
+        //[Authorize(Policies.ViewAllRolesPolicy)]
+        //[ProducesResponseType(200, Type = typeof(List<RoleViewModel>))]
+        public async Task<IActionResult> GetRoles(string providerKey)
+        {
+            var result = await _accountManager.ExternalLogin( providerKey);
+            return Ok(result);
+        }
 
 
 

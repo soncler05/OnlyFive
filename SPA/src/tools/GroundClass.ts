@@ -1,12 +1,18 @@
 import * as FabricJs from 'fabric';
+import { CanvasProfile } from './canvas-profile';
 import { RealGamePin } from './GamePinClass';
+import { Helper } from './Helper';
 import { MinimapClass } from './MinimapClass';
 import { Pin } from './pin';
 import { Player } from './player';
 
 export class GroundClass {
     canvas: FabricJs.fabric.Canvas;
+    private readonly BIG_SCREEN_MIN_HEIGHT = 768;
     private readonly _gamePin: RealGamePin;
+    private canvasProfile: CanvasProfile = Helper.REGULAR_PROFILE;
+    private lastProfile: CanvasProfile;
+    private winningLine: FabricJs.fabric.Line;
     get gamePin(): RealGamePin{
         return this._gamePin; 
     }
@@ -14,9 +20,11 @@ export class GroundClass {
     private readonly _host: Player;
     private readonly _guest: Player;
     // private play: (pin: Pin) => void;
-    readonly width = 2000;
-    readonly height = 1600;
-    private readonly _sideUnit: number = 10; 
+    // width = 2000;
+    // height = 1600;
+    // private sideUnit: number = 10; 
+    private next: (winner) => void;
+    public onComplete: (winner) => void;
 
     private tmp: FabricJs.fabric.Object;
     private lastPin: FabricJs.fabric.Object;
@@ -29,29 +37,29 @@ export class GroundClass {
     /**
      *
      */
-    constructor(host: Player, guest: Player) {
+    constructor(host: Player, guest: Player, next: (winner) => void, onComplete: (winner) => void) {
     
         this._host = host;
         this._guest = guest;
-
+        this.next = next;
+        this.onComplete = onComplete;
+        // this.setProfile();
         this.canvas = new  FabricJs.fabric.Canvas('c', 
         {
             selection : false,
             controlsAboveOverlay:true,
             centeredScaling:true,
             allowTouchScrolling: true,
-            width: this.width,
-            height: this.height
+            width: this.canvasProfile.width,
+            height: this.canvasProfile.height
         });
 
         this.initialBehavior();
-        this.canvas.setBackgroundImage("./assets/img/pinBcg.jpg",
-        (() => {
-            this.canvas.renderAll();
-        }).bind(this), {scaleX: 1, scaleY:1});
+        this.setBackgroundImage();
 
-        this._gamePin = new RealGamePin( this._sideUnit, this.width, this.height,
-            this._host, this._guest, this.canvas, this.addCircle.bind(this), 
+        this._gamePin = new RealGamePin(this.canvasProfile.width/this.canvasProfile.cellSideSize, 
+            this.canvasProfile.height/this.canvasProfile.cellSideSize,
+            this._host, this._guest, this.canvas, this.addCirclePin.bind(this), 
             this.addLastCircle.bind(this),
             this.play.bind(this));
 
@@ -60,12 +68,53 @@ export class GroundClass {
         this._gamePin.automaticPlay();
     }
 
+    private setBackgroundImage() {
+        this.canvas.setBackgroundImage(this.canvasProfile.image,
+        (() => {
+            this.canvas.renderAll();
+        }).bind(this), {scaleX: 1, scaleY:1});
+    }
+
+    private convertPinToUnit(pin: Pin, inverse = false, last = false): Pin{
+
+        let result = Object.assign({}, pin);
+        const cellSideSize = last ? this.lastProfile.cellSideSize : this.canvasProfile.cellSideSize;
+        result.x = !inverse ? pin.x / cellSideSize : pin.x * cellSideSize; 
+        result.y = !inverse ? pin.y / cellSideSize : pin.y * cellSideSize; 
+        return result;
+    }
+
     
     private get playerTurn() : Player {
         return this._host.currentTurn ? this._host : this._guest;
     }
-     
 
+    onResize() {
+        // this.setProfile(true);
+        this.minimap.onResize();
+    }
+
+    setProfile(resize = false) {
+        this.lastProfile = this.canvasProfile;
+        if(window.innerWidth < this.BIG_SCREEN_MIN_HEIGHT) {
+            if(this.canvasProfile != Helper.MOBILE_PROFILE ){
+                this.canvasProfile = Helper.MOBILE_PROFILE
+                if (resize) {
+                    // this.minimap.onResize();
+                    this.resizeMap();
+                }
+            }
+        } else {
+            if (this.canvasProfile != Helper.REGULAR_PROFILE) {
+                this.canvasProfile = Helper.REGULAR_PROFILE
+                if (resize) {
+                    // this.minimap.onResize();
+                    this.resizeMap();
+                }
+            }
+        }
+    }
+    
     private initialBehavior() {
         
         this.canvas.on('mouse:move', (this.OnMouseMove).bind(this));
@@ -75,11 +124,12 @@ export class GroundClass {
 
     private OnMouseMove (options) {
 
-        var pointer = this.canvas.getPointer(options.e);
-        var result = this.calculatePosition(pointer.x, pointer.y, this._sideUnit); 
+        const pointer = this.canvas.getPointer(options.e);
+        let pinPointer = this.convertPinToUnit({x: pointer.x, y: pointer.y} as Pin);
+        let result = this.calculatePosition(pinPointer.x, pinPointer.y); 
     
         if(this.tmp) this.canvas.remove(this.tmp);
-        this.tmp = this.addCircle(result.left, result.top, this.playerTurn.color, 0.4);
+        this.tmp = this.addCirclePin(result.left, result.top, this.playerTurn.color, 0.4);
     
     }
 
@@ -89,13 +139,14 @@ export class GroundClass {
 
     private OnMouseUp (options) {
         var pointer = this.canvas.getPointer(options.e);
-        var result = this.calculatePosition(pointer.x, pointer.y, this._sideUnit); 
+        let pinPointer = this.convertPinToUnit({x: pointer.x, y: pointer.y} as Pin);
+        var result = this.calculatePosition(pinPointer.x, pinPointer.y); 
         var pin = {x:result.left, y:result.top};
 
         this.play(pin as Pin);
     }
 
-    calculatePosition(left, top, width) {
+    calculatePosition(left, top, width = 1) {
        var calculateLeft = Math.round(left / (width*4));
        var calculateTop = Math.round(top / (width*4));
   
@@ -106,31 +157,38 @@ export class GroundClass {
   
     }
 
-    private addCircle(x: number, y: number, color='black', opacity=1) {
+    private addCirclePin(x: number, y: number, color='black', opacity=1) {
         if( !this._gamePin.isPinValid({x:x, y:y} as Pin ) || this._gamePin.isEnded) return;
         if(this._gamePin.pins.find(p => p.x === x && p.y ===y)) return;
+        const pin = this.convertPinToUnit({x: x, y: y} as Pin, true);
+        return this.addCircle(pin, color, opacity);
+    }
+
+    private addCircle(pin: Pin, color: string, opacity: number){
         var circle = new FabricJs.fabric.Circle({ 
-          angle: 30,
-          radius: this._sideUnit,
-          top: y,
-          left: x,
-          opacity: opacity,
-          fill:color,
-          originX: 'center',
-          originY: 'center'
-         });
+            angle: 30,
+            radius: this.canvasProfile.cellSideSize,
+            top: pin.y,
+            left: pin.x,
+            opacity: opacity,
+            fill:color,
+            originX: 'center',
+            originY: 'center'
+        });
         circle.selectable = false;
         circle.hoverCursor = 'default';
         this.canvas.add(circle);
         return circle;
     }
 
+
     addLastCircle(left, top, color='black', opacity= 0.5) {
+        let pinToAdd = this.convertPinToUnit({x: left, y: top} as Pin, true);
         var circle = new FabricJs.fabric.Circle({ 
           angle: 30, 
-          radius: this._sideUnit, 
-          top: top, 
-          left: left, 
+          radius: this.canvasProfile.cellSideSize, 
+          top: pinToAdd.y, 
+          left: pinToAdd.x, 
           opacity: opacity, 
           fill:color,
           originX: 'center',
@@ -151,7 +209,7 @@ export class GroundClass {
     
   private play(pin: Pin) {
     
-    var circleResult = this.addCircle(pin.x, pin.y, this.playerTurn.color);
+    var circleResult = this.addCirclePin(pin.x, pin.y, this.playerTurn.color);
     if (!circleResult) return circleResult;
 
     if(this.lastPin) this.canvas.remove(this.lastPin);
@@ -164,8 +222,10 @@ export class GroundClass {
         
     var alignPins = this._gamePin.isComplete(pin); 
     if (alignPins) {
-      this.addLine(alignPins[0], alignPins[alignPins.length-1], this.getPlayer(alignPins[0].playerId).color);
-      this._gamePin.isEnded = true;
+        const player = this.getPlayer(alignPins[0].playerId);
+        this.onComplete(player.userName);
+        this.addLine(alignPins[0], alignPins[alignPins.length-1], player.color);
+        this._gamePin.isEnded = true;
     }
 
     this._gamePin.changePlayer();
@@ -187,25 +247,28 @@ export class GroundClass {
 
     
     private addLine(pinFirst: Pin, pinLast: Pin, color='black') {
+        let pinFirstToAdd = this.convertPinToUnit(pinFirst, true);
+        let pinLastToAdd = this.convertPinToUnit(pinLast, true);
         var playerTurn = this.playerTurn;
-        const line = new FabricJs.fabric.Line([pinFirst.x, pinFirst.y, pinFirst.x, pinFirst.y], {
+        this.winningLine = new FabricJs.fabric.Line([pinFirstToAdd.x, pinFirstToAdd.y, pinFirstToAdd.x, pinFirstToAdd.y], {
         stroke: color,
         strokeWidth: 3,
         originX: 'center',
         originY: 'center'
         });
-        line.selectable = false;
-        line.hoverCursor = 'default';
-        this.canvas.add(line);
-        line.animate({
-        x2: pinLast.x,
-        y2: pinLast.y
+        this.winningLine.selectable = false;
+        this.winningLine.hoverCursor = 'default';
+        this.canvas.add(this.winningLine);
+        this.winningLine.animate({
+        x2: pinLastToAdd.x,
+        y2: pinLastToAdd.y
         }, {
         onChange: this.canvas.renderAll.bind(this.canvas),
         onComplete: function() {
-            line.setCoords();
-            alert(` ${playerTurn.userName} ha completado un cinco!!!` );
-        },
+            this.winningLine.setCoords();
+            this.next(playerTurn);
+            
+        }.bind(this),
         duration: 2000
         });
     }
@@ -242,5 +305,48 @@ export class GroundClass {
         
             });
         });
+    }
+
+    resizeMap() {
+        this.canvas.clear();
+        this.canvas.setDimensions({height: this.canvasProfile.height, width: this.canvasProfile.width});
+        this.gamePin.pins.forEach((p) => {
+            const player = this.getPlayer(p.playerId);
+            this.addCircle(this.convertPinToUnit(p, true), player.color, 1);
+        });
+        if(this.lastPin){
+            const pin = this.convertPinToUnit({x: this.lastPin.left, y: this.lastPin.top} as Pin,
+                false, true); 
+            this.lastPin = this.addLastCircle(pin.x, pin.y, 
+                this.getPlayer(this.gamePin.pins[this.gamePin.pins.length - 1].playerId).color);
+        }
+        if (this.winningLine) {
+            let point1 = this.convertPinToUnit({x: this.winningLine.x1, y: this.winningLine.y1} as Pin, false, true);
+            point1 = this.convertPinToUnit(point1, true);
+           
+            let point2 = this.convertPinToUnit({x: this.winningLine.x2, y: this.winningLine.y2} as Pin, false, true);
+            point2 = this.convertPinToUnit(point2, true);
+
+            this.winningLine.x1 = point1.x;
+            this.winningLine.y1 = point1.y;
+
+            this.winningLine.x2 = point2.x;
+            this.winningLine.y2 = point2.y;
+            
+            this.winningLine.set(this.winningLine);
+            this.canvas.add(this.winningLine);
+            this.winningLine.setCoords();
+        }
+        this.setBackgroundImage();
+    }
+    newGame(){
+        this.canvas.clear();
+        this.setBackgroundImage();
+        this._gamePin.clearGroups();
+        this._gamePin.setAutomaticPlayerTurn();
+        this._gamePin.isEnded = false;
+        this._gamePin.automaticPlay();
+        console.log("isEnded->",this._gamePin.isEnded);
+        
     }
 }

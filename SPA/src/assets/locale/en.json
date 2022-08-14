@@ -1,0 +1,31 @@
+{
+    "home": {
+        "WelcomeMsg": "Put 5 in a row to win!",
+        "NotImplemented": "Coming soon",
+        "RoundCompletedTitle": "Round completed",
+        "Completed": "{userName} has completed a five.",
+        "options":{
+            "OnePlayer":"Play by my self",     
+            "FriendPlayer":"Play with a friend",     
+            "RandomPlayer":"Play with a random player",
+            "onePOptions": {
+                "One": "1 round",
+                "Three": "3 rounds",
+                "Five": "5 rounds",
+                "Nine": "9 rounds"
+            }     
+        }
+    },
+    "game": {
+        "RoundCompletedTitle": "Round completed",
+        "RoundCompletedMsg": "{userName} has completed a 5.",
+        "BackHome": "Back home",
+        "Congrats": "Congratulations, you won the game!!",
+        "Sorry": "Sorry, you lost.",
+        "End": "Game ended"
+    },
+    "modal":{
+        "Confirm": "Confirm",
+        "Cancel": "Cancel"
+    }
+}

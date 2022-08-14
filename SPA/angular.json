@@ -63,7 +63,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "OnlyFive:build"
+            "browserTarget": "OnlyFive:build",
+            "disableHostCheck": true
           },
           "configurations": {
             "production": {
