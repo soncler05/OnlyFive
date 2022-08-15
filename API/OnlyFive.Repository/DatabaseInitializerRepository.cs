@@ -26,7 +26,7 @@ namespace OnlyFive.Repository
 
         public async Task SeedAsync()
         {
-                _logger.LogInformation(_config.GetSection("ConnectionStrings:DefaultConnection").ToString());
+                _logger.LogInformation("ConnectionStrings:DefaultConnection -------------->" + _config.GetSection("ConnectionStrings:DefaultConnection").ToString());
             await _context.Database.MigrateAsync().ConfigureAwait(false);
 
             var u = await _context.Users.FirstOrDefaultAsync(x => true);
