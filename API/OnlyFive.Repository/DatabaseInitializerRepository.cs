@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OnlyFive.RepositoryInterface;
 using OnlyFive.Types.Helpers;
@@ -13,16 +14,19 @@ namespace OnlyFive.Repository
         private readonly ApplicationDbContext _context;
         private readonly IAccountManagerRepository _accountManager;
         private readonly ILogger _logger;
+        private readonly IConfiguration _config;
 
-        public DatabaseInitializerRepository(ApplicationDbContext context, IAccountManagerRepository accountManager, ILogger<DatabaseInitializerRepository> logger)
+        public DatabaseInitializerRepository(ApplicationDbContext context, IAccountManagerRepository accountManager, ILogger<DatabaseInitializerRepository> logger, IConfiguration config)
         {
             _accountManager = accountManager;
             _context = context;
             _logger = logger;
+            _config = config;
         }
 
         public async Task SeedAsync()
         {
+                _logger.LogInformation(_config.GetSection("ConnectionStrings:DefaultConnection").ToString());
             await _context.Database.MigrateAsync().ConfigureAwait(false);
 
             var u = await _context.Users.FirstOrDefaultAsync(x => true);
