@@ -113,9 +113,7 @@ const GUARDS = [GameGuard];
             )
           }
         ],
-        onError: (err) => {
-          console.error(err);
-        }
+        onError: onError
       } as SocialAuthServiceConfig,
     },
     ...GUARDS
@@ -125,3 +123,7 @@ const GUARDS = [GameGuard];
   entryComponents: [GameResultComponent, GeneralModalComponent]
 })
 export class AppModule { }
+
+export function onError(error) {
+  console.log(error);
+}
