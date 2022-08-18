@@ -18,9 +18,9 @@
   <div class="title mt-5">
     <h1 class="text-center" [translate]="'home.WelcomeMsg'"></h1>
   </div>
-  <div class="btn-box mt-5 text-center">
-    <div class="btn-group" dropdown>
-      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg mr-5 dropdown-toggle">
+  <div class="btn-box mt-5 text-center" id="btn-box">
+    <div class="btn-group mb-2" dropdown>
+      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg dropdown-toggle">
         {{'home.options.OnePlayer' | translate}}<span class="caret"></span></button>
       <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
           role="menu" aria-labelledby="button-basic">
@@ -32,7 +32,7 @@
         </li>
       </ul>
     </div>
-    <button type="button" class="btn btn-primary btn-lg mr-5" (click)="playWithAFriend()">{{'home.options.FriendPlayer' | translate}}</button>
-    <button type="button"  class="btn btn-outline-primary btn-lg" (click)="playWithARandomPlayer()" style="color: white; border-color: white;">{{'home.options.RandomPlayer' | translate}}</button>
+    <button type="button" class="btn btn-primary  btn-lg mb-2" (click)="playWithAFriend()">{{'home.options.FriendPlayer' | translate}}</button>
+    <button type="button"  class="btn btn-outline-primary mb-2 btn-lg" (click)="playWithARandomPlayer()" style="color: white; border-color: white;">{{'home.options.RandomPlayer' | translate}}</button>
   </div>
 </div>
