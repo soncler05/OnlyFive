@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { Observable, Subject, from, throwError } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { OAuthService } from 'angular-oauth2-oidc';
+// import { OAuthService } from 'angular-oauth2-oidc';
 import { Utilities } from 'src/Utilities/Utilities';
 import { LocalStoreManager } from './local-store-manager.service';
 import { ConfigurationService } from './configuration.service';
@@ -43,7 +43,7 @@ export class AuthService {
 
   constructor(
     private router: Router,
-    private oauthService: OAuthService,
+    // private oauthService: OAuthService,
     private configurations: ConfigurationService,
     private localStorage: LocalStoreManager) {
 
@@ -106,40 +106,41 @@ export class AuthService {
   }
 
   refreshLogin(): Observable<User> {
-    if (this.oauthService.discoveryDocumentLoaded) {
-      return from(this.oauthService.refreshToken()).pipe(
-        map(() => this.processLoginResponse(this.oauthService.getAccessToken(), this.rememberMe)));
-    } else {
-      this.configureOauthService(this.rememberMe);
-      return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => this.refreshLogin()));
-    }
+    return null;
+    // if (this.oauthService.discoveryDocumentLoaded) {
+    //   return from(this.oauthService.refreshToken()).pipe(
+    //     map(() => this.processLoginResponse(this.oauthService.getAccessToken(), this.rememberMe)));
+    // } else {
+    //   this.configureOauthService(this.rememberMe);
+    //   return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => this.refreshLogin()));
+    // }
   }
 
   login(userName: string, password: string, rememberMe?: boolean) {
     this.preLogin(rememberMe);
 
-    return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => {
-      return from(this.oauthService.fetchTokenUsingPasswordFlow(userName, password)).pipe(
-        map(() => this.processLoginResponse(this.oauthService.getAccessToken(), rememberMe))
-      );
-    }));
+    // return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => {
+    //   return from(this.oauthService.fetchTokenUsingPasswordFlow(userName, password)).pipe(
+    //     map(() => this.processLoginResponse(this.oauthService.getAccessToken(), rememberMe))
+    //   );
+    // }));
   }
   loginExternal(provider: string, token: Object, grantType: string, rememberMe?: boolean) {
     this.preLogin(rememberMe);
     
-    return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => {
-      return from(this.oauthService.fetchTokenUsingGrant(grantType, {
-        // client_id : [your_client_id],
-        // scopes : [your_scopes],
-        // grant_type : grantType,
-        // client_secret : AuthOpenIdProviders.PROVIDERS.find(p => p.name === provider).clientId,
-        provider : provider, 
-        token  : token
+    // return from(this.oauthService.loadDiscoveryDocument(this.discoveryDocUrl)).pipe(mergeMap(() => {
+    //   return from(this.oauthService.fetchTokenUsingGrant(grantType, {
+    //     // client_id : [your_client_id],
+    //     // scopes : [your_scopes],
+    //     // grant_type : grantType,
+    //     // client_secret : AuthOpenIdProviders.PROVIDERS.find(p => p.name === provider).clientId,
+    //     provider : provider, 
+    //     token  : token
 
-      })).pipe(
-        map(() => this.processLoginResponse(this.oauthService.getAccessToken(), rememberMe))
-      );
-    }));
+    //   })).pipe(
+    //     map(() => this.processLoginResponse(this.oauthService.getAccessToken(), rememberMe))
+    //   );
+    // }));
   }
 
 
@@ -152,11 +153,11 @@ export class AuthService {
   }
 
   private configureOauthService(rememberMe?: boolean) {
-    this.oauthService.issuer = this.baseUrl;
-    this.oauthService.clientId = 'quickapp_spa';
-    this.oauthService.scope = 'openid email phone profile roles';// quickapp_api;
-    this.oauthService.skipSubjectCheck = true;
-    this.oauthService.dummyClientSecret = 'not_used';
+    // this.oauthService.issuer = this.baseUrl;
+    // this.oauthService.clientId = 'quickapp_spa';
+    // this.oauthService.scope = 'openid email phone profile roles';// quickapp_api;
+    // this.oauthService.skipSubjectCheck = true;
+    // this.oauthService.dummyClientSecret = 'not_used';
 
     AuthStorage.RememberMe = rememberMe;
   }
@@ -211,7 +212,7 @@ export class AuthService {
     this.localStorage.deleteData(DBkeys.CURRENT_USER);
 
     this.configurations.clearLocalChanges();
-    this.oauthService.logOut(true);
+    // this.oauthService.logOut(true);
 
     this.reevaluateLoginStatus();
   }
@@ -246,11 +247,13 @@ export class AuthService {
   }
 
   get accessToken(): string {
-    return this.oauthService.getAccessToken();
+    return "";
+    // return this.oauthService.getAccessToken();
   }
 
   get accessTokenExpiryDate(): Date {
-    return new Date(this.oauthService.getAccessTokenExpiration());
+    return null;
+    // return new Date(this.oauthService.getAccessTokenExpiration());
   }
 
   get isSessionExpired(): boolean {
@@ -262,7 +265,8 @@ export class AuthService {
   }
 
   get refreshToken(): string {
-    return this.oauthService.getRefreshToken();
+    return "";
+    // return this.oauthService.getRefreshToken();
   }
 
   get isLoggedIn(): boolean {

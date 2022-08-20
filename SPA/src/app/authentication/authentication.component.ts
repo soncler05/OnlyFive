@@ -97,7 +97,7 @@ export class AuthenticationComponent extends FormHelper implements OnInit  {
       resp => {
         console.log(resp);
         this.authService.loginExternal(providerStr, resp.idToken, "external", true )
-        .subscribe(r => console.log(r), er => console.error(er));
+        // .subscribe(r => console.log(r), er => console.error(er));
       }
     );
   }
@@ -112,46 +112,46 @@ export class AuthenticationComponent extends FormHelper implements OnInit  {
     this.userLogin.rememberMe = formEntity.rememberMe; 
 
     this.authService.login(this.userLogin.userName, this.userLogin.password, this.userLogin.rememberMe)
-      .subscribe(
-        user => {
-          setTimeout(() => {
-            this.alertService.stopLoadingMessage();
-            this.isLoading = false;
-            this.reset();
+      // .subscribe(
+      //   user => {
+      //     setTimeout(() => {
+      //       this.alertService.stopLoadingMessage();
+      //       this.isLoading = false;
+      //       this.reset();
 
-            if (!this.isModal) {
-              this.alertService.showMessage('Login', `Welcome ${user.userName}!`, MessageSeverity.success);
-            } else {
-              this.alertService.showMessage('Login', `Session for ${user.userName} restored!`, MessageSeverity.success);
-              setTimeout(() => {
-                this.alertService.showStickyMessage('Session Restored', 'Please try your last operation again', MessageSeverity.default);
-              }, 500);
+      //       if (!this.isModal) {
+      //         this.alertService.showMessage('Login', `Welcome ${user.userName}!`, MessageSeverity.success);
+      //       } else {
+      //         this.alertService.showMessage('Login', `Session for ${user.userName} restored!`, MessageSeverity.success);
+      //         setTimeout(() => {
+      //           this.alertService.showStickyMessage('Session Restored', 'Please try your last operation again', MessageSeverity.default);
+      //         }, 500);
 
-              this.closeModal();
-            }
-          }, 500);
-        },
-        error => {
+      //         this.closeModal();
+      //       }
+      //     }, 500);
+      //   },
+      //   error => {
 
-          this.alertService.stopLoadingMessage();
+      //     this.alertService.stopLoadingMessage();
 
-          if (Utilities.checkNoNetwork(error)) {
-            this.alertService.showStickyMessage(Utilities.noNetworkMessageCaption, Utilities.noNetworkMessageDetail, MessageSeverity.error, error);
-            this.offerAlternateHost();
-          } else {
-            const errorMessage = Utilities.getHttpResponseMessage(error);
+      //     if (Utilities.checkNoNetwork(error)) {
+      //       this.alertService.showStickyMessage(Utilities.noNetworkMessageCaption, Utilities.noNetworkMessageDetail, MessageSeverity.error, error);
+      //       this.offerAlternateHost();
+      //     } else {
+      //       const errorMessage = Utilities.getHttpResponseMessage(error);
 
-            if (errorMessage) {
-              this.alertService.showStickyMessage('Unable to login', this.mapLoginErrorMessage(errorMessage), MessageSeverity.error, error);
-            } else {
-              this.alertService.showStickyMessage('Unable to login', 'An error occured whilst logging in, please try again later.\nError: ' + Utilities.getResponseBody(error), MessageSeverity.error, error);
-            }
-          }
+      //       if (errorMessage) {
+      //         this.alertService.showStickyMessage('Unable to login', this.mapLoginErrorMessage(errorMessage), MessageSeverity.error, error);
+      //       } else {
+      //         this.alertService.showStickyMessage('Unable to login', 'An error occured whilst logging in, please try again later.\nError: ' + Utilities.getResponseBody(error), MessageSeverity.error, error);
+      //       }
+      //     }
 
-          setTimeout(() => {
-            this.isLoading = false;
-          }, 500);
-        });
+      //     setTimeout(() => {
+      //       this.isLoading = false;
+      //     }, 500);
+      //   });
   }
 
 

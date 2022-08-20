@@ -8,7 +8,7 @@ import { HomeComponent } from 'src/home/home.component';
 import { AuthenticationComponent } from 'src/app/authentication/authentication.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppTranslationService, TranslateLanguageLoader } from 'src/Services/app-translation.service';
-import { AuthConfig, OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
+// import { AuthConfig, OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AuthStorage } from 'src/Services/auth.storage';
 import { AlertService } from 'src/Services/alert.service';
 import { ConfigurationService } from 'src/Services/configuration.service';
@@ -60,12 +60,12 @@ const GUARDS = [GameGuard];
     FormsModule,
     AppRoutingModule,
     ToastaModule.forRoot(),
-    OAuthModule.forRoot({
-      resourceServer:{
-        allowedUrls: [environment.tokenUrl],
-        sendAccessToken: true
-      }
-    }),
+    // OAuthModule.forRoot({
+    //   resourceServer:{
+    //     allowedUrls: [environment.tokenUrl],
+    //     sendAccessToken: true
+    //   }
+    // }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -79,7 +79,7 @@ const GUARDS = [GameGuard];
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
-    { provide: OAuthStorage, useClass: AuthStorage },
+    // { provide: OAuthStorage, useClass: AuthStorage },
     { provide: BsDropdownConfig, useValue: { autoClose: true } },
     AlertService,
     // ThemeManager,
