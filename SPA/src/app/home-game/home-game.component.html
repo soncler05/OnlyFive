@@ -1,7 +1,8 @@
 
 <div style="width: 100%; text-align: center;">
     <span id="up-down" style="margin: auto; color: #ffffff;" (click)="toggleArrow()"> 
-      <fa [name]="isUp ? 'arrow-up' : 'arrow-down'" size="lg"></fa>
+        <i class="fa {{isUp ? 'fa-arrow-up' : 'fa-arrow-down'}}"></i>
+      <!-- <fa [name]="isUp ? 'arrow-up' : 'arrow-down'" size="lg"></fa> -->
     </span>
 </div>
 <app-nav [isUp]="isUp"></app-nav>

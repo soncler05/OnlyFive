@@ -28,7 +28,6 @@ import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import { ResetPwdComponent } from './account/reset-pwd/reset-pwd.component';
 import { ChangePwdComponent } from './account/change-pwd/change-pwd.component';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NavComponent } from './nav/nav.component';
 import { GameConfigComponent } from './game-config/game-config.component';
 import { GameResultComponent } from './game-result/game-result.component';
@@ -59,7 +58,6 @@ const GUARDS = [GameGuard];
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    AngularFontAwesomeModule,
     AppRoutingModule,
     ToastaModule.forRoot(),
     OAuthModule.forRoot({
