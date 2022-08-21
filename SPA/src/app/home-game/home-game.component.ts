@@ -14,7 +14,6 @@ import { Game } from 'src/Types/Game';
 export class HomeGameComponent implements OnInit,AfterViewInit {
   isUp = true;
   game: Game;
-  ground: GroundClass;
   constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService) {
     this.game = gameManagerServ.game;
     
@@ -39,7 +38,7 @@ export class HomeGameComponent implements OnInit,AfterViewInit {
   
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-     this.ground.onResize();
+    this.gameManagerServ.ground.onResize();
   }
 
   
