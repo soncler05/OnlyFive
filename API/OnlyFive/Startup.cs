@@ -169,26 +169,26 @@ namespace OnlyFive
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             Utilities.ConfigureLogger(loggerFactory);
-            //if (env.IsDevelopment())
-            //{
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OnlyFive v1"));
-            //}
+            }
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            
-            //if (env.IsDevelopment())
+
+            if (env.IsDevelopment())
                 app.UseCors(builder => builder
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
-            //else
-            //    app.UseCors(builder => builder
-            //        .WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
-            //        .AllowAnyHeader()
-            //        .AllowAnyMethod());
+            else
+                app.UseCors(builder => builder
+                    .WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
 
             app.UseIdentityServer();
             app.UseAuthorization();
@@ -200,10 +200,10 @@ namespace OnlyFive
                 endpoints.MapControllers();
             });
 
-            //if (env.IsDevelopment())
-            //{
-            //    IdentityModelEventSource.ShowPII = true;
-            //}
+            if (env.IsDevelopment())
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
         }
     }
 }
