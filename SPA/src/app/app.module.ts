@@ -38,87 +38,81 @@ import { ToastaModule } from 'ngx-toasta';
 
 const GUARDS = [GameGuard];
 @NgModule({
-  declarations: [								
-    AppComponent,
-      HomeGameComponent,
-      HomeComponent,
-      AuthenticationComponent,
-      AccountComponent,
-      SignInComponent,
-      SignUpComponent,
-      ResetPwdComponent,
-      ChangePwdComponent,
-      NavComponent,
-      GameConfigComponent,
-      GameResultComponent,
-      GeneralModalComponent
-   ],
-  imports: [
-    ReactiveFormsModule,
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    AppRoutingModule,
-    ToastaModule.forRoot(),
-    // OAuthModule.forRoot({
-    //   resourceServer:{
-    //     allowedUrls: [environment.tokenUrl],
-    //     sendAccessToken: true
-    //   }
-    // }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: TranslateLanguageLoader
-      }
-    }),
-    ModalModule.forRoot(),
-    BrowserAnimationsModule,
-    BsDropdownModule.forRoot(),
-    SocialLoginModule,
-  ],
-  providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler },
-    // { provide: OAuthStorage, useClass: AuthStorage },
-    { provide: BsDropdownConfig, useValue: { autoClose: true } },
-    AlertService,
-    // ThemeManager,
-    ConfigurationService,
-    // AppTitleService,
-    AppTranslationService,
-    AlertService,
-    // NotificationService,
-    // NotificationEndpoint,
-    // AccountService,
-    // AccountEndpoint,
-    LocalStoreManager,
-    AuthService,
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              environment.openIdConnect.google.clientId
-            )
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(
-              environment.openIdConnect.facebook.clientId
-            )
-          }
-        ],
-        onError: onError
-      } as SocialAuthServiceConfig,
-    },
-    ...GUARDS
-    
-  ],
-  bootstrap: [AppComponent],
-  entryComponents: [GameResultComponent, GeneralModalComponent]
+    declarations: [
+        AppComponent,
+        HomeGameComponent,
+        HomeComponent,
+        AuthenticationComponent,
+        AccountComponent,
+        SignInComponent,
+        SignUpComponent,
+        ResetPwdComponent,
+        ChangePwdComponent,
+        NavComponent,
+        GameConfigComponent,
+        GameResultComponent,
+        GeneralModalComponent
+    ],
+    imports: [
+        ReactiveFormsModule,
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        AppRoutingModule,
+        ToastaModule.forRoot(),
+        // OAuthModule.forRoot({
+        //   resourceServer:{
+        //     allowedUrls: [environment.tokenUrl],
+        //     sendAccessToken: true
+        //   }
+        // }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useClass: TranslateLanguageLoader
+            }
+        }),
+        ModalModule.forRoot(),
+        BrowserAnimationsModule,
+        BsDropdownModule.forRoot(),
+        SocialLoginModule,
+    ],
+    providers: [
+        { provide: ErrorHandler, useClass: AppErrorHandler },
+        // { provide: OAuthStorage, useClass: AuthStorage },
+        { provide: BsDropdownConfig, useValue: { autoClose: true } },
+        AlertService,
+        // ThemeManager,
+        ConfigurationService,
+        // AppTitleService,
+        AppTranslationService,
+        AlertService,
+        // NotificationService,
+        // NotificationEndpoint,
+        // AccountService,
+        // AccountEndpoint,
+        LocalStoreManager,
+        AuthService,
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: false,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(environment.openIdConnect.google.clientId)
+                    },
+                    {
+                        id: FacebookLoginProvider.PROVIDER_ID,
+                        provider: new FacebookLoginProvider(environment.openIdConnect.facebook.clientId)
+                    }
+                ],
+                onError: onError
+            } as SocialAuthServiceConfig,
+        },
+        ...GUARDS
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
 
