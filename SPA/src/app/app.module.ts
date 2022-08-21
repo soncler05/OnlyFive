@@ -18,7 +18,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AuthService } from 'src/Services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { SocialLoginModule, SocialAuthServiceConfig } from "angularx-social-login";
@@ -34,6 +34,8 @@ import { GameResultComponent } from './game-result/game-result.component';
 import { GameGuard } from 'src/security/game-guard';
 import { GeneralModalComponent } from './general-modal/general-modal.component';
 import { ToastaModule } from 'ngx-toasta';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar-observables';
+import { LoadingInterceptorService } from 'src/Services/http/loading.interceptor.service';
 
 
 const GUARDS = [GameGuard];
@@ -72,6 +74,7 @@ const GUARDS = [GameGuard];
                 useClass: TranslateLanguageLoader
             }
         }),
+        SlimLoadingBarModule.forRoot(),
         ModalModule.forRoot(),
         BrowserAnimationsModule,
         BsDropdownModule.forRoot(),
@@ -110,7 +113,8 @@ const GUARDS = [GameGuard];
                 onError: onError
             } as SocialAuthServiceConfig,
         },
-        ...GUARDS
+        ...GUARDS,
+        { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptorService, multi: true },
     ],
     bootstrap: [AppComponent]
 })

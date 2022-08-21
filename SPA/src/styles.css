@@ -13,6 +13,7 @@
 @import '../src/assets/styles/alertify.bootstrap.css';
 @import '../src/assets/styles/bootstrap4-compatibility.css';
 
+@import '~ng2-slim-loading-bar-observables/style.css';
 
 .score {
     padding: 0px 4px;
