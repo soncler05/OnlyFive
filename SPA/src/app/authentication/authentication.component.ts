@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { BaseLoginProvider, FacebookLoginProvider, GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { takeUntil } from 'rxjs/operators';
 import { FormHelper } from 'src/helpers/form-helper';
@@ -30,7 +30,7 @@ export class AuthenticationComponent extends FormHelper implements OnInit  {
   constructor(private alertService: AlertService,
      private authService: AuthService, 
      private socialAuthService: SocialAuthService,
-     private fb: FormBuilder,
+     private fb: UntypedFormBuilder,
      private httpClient: HttpClient,
      private configurations: ConfigurationService) {
        super();

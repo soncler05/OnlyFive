@@ -1,8 +1,8 @@
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { ComponentHelper } from "./component-helper";
 
 export abstract class FormHelper extends ComponentHelper {
-    form: FormGroup;
+    form: UntypedFormGroup;
     get Name() { return this.form.get('name'); }
 
     
