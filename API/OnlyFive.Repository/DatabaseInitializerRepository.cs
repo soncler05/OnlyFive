@@ -29,21 +29,17 @@ namespace OnlyFive.Repository
                 _logger.LogInformation("ConnectionStrings:DefaultConnection -------------->" + _config.GetSection("ConnectionStrings:DefaultConnection").ToString());
             await _context.Database.MigrateAsync().ConfigureAwait(false);
 
-            var u = await _context.Users.FirstOrDefaultAsync(x => true);
+            _logger.LogInformation("Generating inbuilt accounts");
 
-            if (!await _context.Users.AnyAsync())
-            {
-                _logger.LogInformation("Generating inbuilt accounts");
+            await EnsureRoleAsync(Constants.ROLE_ADMIN, "Default administrator", new string[] { });
+            await EnsureRoleAsync(Constants.ROLE_USER, "Default user", new string[] { });
 
-                await EnsureRoleAsync(Constants.ROLE_ADMIN, "Default administrator", new string[] { });
-                await EnsureRoleAsync(Constants.ROLE_USER, "Default user", new string[] { });
+            await CreateUserAsync("admin", "tempP@ss123", "Inbuilt Administrator", "soncler05@gmail.com", "+52 (465) 121-1341", new string[] { Constants.ROLE_ADMIN }, "b054d785-6997-49d5-a339-573de64e0901");
+            await CreateUserAsync(Constants.DEFAULT_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.DEFAULT_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.DEFAULT_USER.Id);
+            await CreateUserAsync(Constants.AUTOMATIC_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.AUTOMATIC_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.AUTOMATIC_USER.Id);
+            await CreateUserAsync(Constants.DEFAULT_GUEST_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.DEFAULT_GUEST_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.DEFAULT_GUEST_USER.Id);
 
-                await CreateUserAsync("admin", "tempP@ss123", "Inbuilt Administrator", "soncler05@gmail.com", "+52 (465) 121-1341", new string[] { Constants.ROLE_ADMIN }, "b054d785-6997-49d5-a339-573de64e0901");
-                await CreateUserAsync(Constants.DEFAULT_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.DEFAULT_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.DEFAULT_USER.Id);
-                await CreateUserAsync(Constants.AUTOMATIC_USER.UserName, "tempP@ss123", "Inbuilt Standard User", Constants.AUTOMATIC_USER.Email, "+1 (123) 000-0001", new string[] { Constants.ROLE_USER }, Constants.AUTOMATIC_USER.Id);
-
-                _logger.LogInformation("Inbuilt account generation completed");
-            }
+            _logger.LogInformation("Inbuilt account generation completed");
 
         }
 
@@ -62,8 +58,10 @@ namespace OnlyFive.Repository
             }
         }
 
-        private async Task<ApplicationUser> CreateUserAsync(string userName, string password, string fullName, string email, string phoneNumber, string[] roles, string id)
+        private async Task CreateUserAsync(string userName, string password, string fullName, string email, string phoneNumber, string[] roles, string id)
         {
+            if (await _context.Users.AnyAsync(x => x.Id == id)) return;
+
             ApplicationUser applicationUser = new ApplicationUser
             {
                 Id = id,
@@ -79,9 +77,6 @@ namespace OnlyFive.Repository
 
             if (!result.Succeeded)
                 throw new Exception($"Seeding \"{userName}\" user failed. Errors: {string.Join(Environment.NewLine, result.Errors)}");
-
-
-            return applicationUser;
         }
     }
 }

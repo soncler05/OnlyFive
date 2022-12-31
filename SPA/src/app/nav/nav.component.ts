@@ -3,11 +3,13 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AccountModeEnum } from 'src/helpers/account/account-mode-enum.enum';
 import { AlertService, DialogType, MessageSeverity } from 'src/Services/alert.service';
 import { AppTranslationService } from 'src/Services/app-translation.service';
+import { ConfigurationService } from 'src/Services/configuration.service';
 import { GameManagerService } from 'src/Services/game-manager.service';
+import { GameService } from 'src/Services/http/game.service';
 import { LocalStoreManager } from 'src/Services/local-store-manager.service';
-import { Helper } from 'src/tools/Helper';
 import { Player } from 'src/tools/player';
 import { Game } from 'src/Types/Game';
+import { UserTypeEnum } from 'src/Types/Hub';
 import { DBkeys } from 'src/Utilities/db-keys';
 
 @Component({
@@ -18,11 +20,18 @@ import { DBkeys } from 'src/Utilities/db-keys';
 export class NavComponent implements OnInit {
   @Input() isUp = true;
   constructor(private modalService: BsModalService,  public gameManagerServ: GameManagerService, private alertService: AlertService, 
-    appTranslationServ: AppTranslationService, private localStorage: LocalStoreManager) { }
+    appTranslationServ: AppTranslationService, private localStorage: LocalStoreManager, private gameServ: GameService, private config: ConfigurationService) {
+      this.deviceId = config.deviceId;
+    }
 
   accountModes = AccountModeEnum;
+  deviceId: string;
   
   modalRef: BsModalRef;
+  
+  public get isStarted() : boolean {
+    return this.gameManagerServ.isStarted;
+  }
   
   ngOnInit() {
   }
@@ -50,18 +59,27 @@ export class NavComponent implements OnInit {
     return this.gameManagerServ.game;
   }
    
-  public editUserName(){
+  public editUserName(playerId: string){
     const maxLength = 20;
     const minLength = 3;
     this.alertService.showDialog("Editar", DialogType.prompt, (val =>  {
       val = val.trim();
       if(val.length >= minLength && val.length <= maxLength){
         this.localStorage.savePermanentData(val, DBkeys.CURRENT_USER);
-        Helper.DEFAULT_PLAYER.userName = val;
-        this.game.guest.userName = val;
-        this.alertService.showMessage(val, "", MessageSeverity.success);
+        let playerType;
+        if(playerId === this.game.host.playerId) {
+          this.game.hostName = val;
+          playerType = UserTypeEnum.Host
+        } else {
+          this.game.guestName = val;
+          playerType = UserTypeEnum.Guest;
+        }
+        this.gameServ.newUserName(this.gameManagerServ.game.urlId, val, playerType).subscribe(
+          () => {
+            this.alertService.showMessage(val, "", MessageSeverity.success);
+          });
       } else{
-        this.alertService.showMessage("Error", "No se guardó", MessageSeverity.error);
+        this.alertService.showMessage("Error", "", MessageSeverity.error);
 
       }
     }));

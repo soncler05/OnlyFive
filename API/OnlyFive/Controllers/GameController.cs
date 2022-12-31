@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using OnlyFive.BusinessInterface;
+using OnlyFive.Hubs;
+using OnlyFive.Types.Core.Enums;
 using OnlyFive.Types.DTOS;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlyFive.Controllers
@@ -15,10 +16,12 @@ namespace OnlyFive.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
+        private readonly IHubContext<RoomHub> _hubContext;
 
-        public GameController(IGameService gameService)
+        public GameController(IGameService gameService, IHubContext<RoomHub> hubContext)
         {
             _gameService = gameService;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -47,11 +50,13 @@ namespace OnlyFive.Controllers
             await _gameService.Delete(gameId);
             return Ok();
         }
+
         [HttpGet("{gameId}")]
         public async Task<IActionResult> Find(int gameId)
         {
             return Ok(await _gameService.Find(gameId));
         }
+
         [HttpGet("urlId/{urlId}")]
         public async Task<IActionResult> Find(string urlId)
         {
@@ -60,6 +65,14 @@ namespace OnlyFive.Controllers
                 return Ok(result);
             else
                 return NotFound();
+        }
+
+        [HttpPut("userName/{urlId}/{newName}/{userType}")]
+        public async Task<IActionResult> NewUserName(string urlId, string newName, UserTypeEnum userType)
+        {
+                await _gameService.UpdateName(urlId, newName, userType);
+                await RoomHub.NewUserName(_hubContext, HttpContext.Connection.Id, urlId, userType, newName);
+                return Ok();
         }
     }
 }

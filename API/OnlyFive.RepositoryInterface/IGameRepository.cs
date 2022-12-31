@@ -1,8 +1,4 @@
 ﻿using OnlyFive.Types.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlyFive.RepositoryInterface
@@ -14,6 +10,6 @@ namespace OnlyFive.RepositoryInterface
         Task<Game> Find(int id);
         Task<Game> FindByUrlId(string urlId);
         Task Update(Game entity);
+        Task<Game> FindWithRound(string gameUrlId, int rounDOffset);
     }
-
 }

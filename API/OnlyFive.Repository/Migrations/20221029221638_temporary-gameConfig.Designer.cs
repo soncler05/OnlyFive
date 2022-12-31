@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlyFive.Repository;
 
@@ -11,9 +12,10 @@ using OnlyFive.Repository;
 namespace OnlyFive.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029221638_temporary-gameConfig")]
+    partial class temporarygameConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,22 +240,6 @@ namespace OnlyFive.Repository.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OnlyFive.Types.Models.Config", b =>
-                {
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GuestName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HostName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GameId");
-
-                    b.ToTable("Configs");
-                });
-
             modelBuilder.Entity("OnlyFive.Types.Models.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -261,6 +247,9 @@ namespace OnlyFive.Repository.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Config")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -379,17 +368,6 @@ namespace OnlyFive.Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OnlyFive.Types.Models.Config", b =>
-                {
-                    b.HasOne("OnlyFive.Types.Models.Game", "Game")
-                        .WithOne("Config")
-                        .HasForeignKey("OnlyFive.Types.Models.Config", "GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
             modelBuilder.Entity("OnlyFive.Types.Models.Game", b =>
                 {
                     b.HasOne("OnlyFive.Types.Models.ApplicationUser", "Guest")
@@ -438,8 +416,6 @@ namespace OnlyFive.Repository.Migrations
 
             modelBuilder.Entity("OnlyFive.Types.Models.Game", b =>
                 {
-                    b.Navigation("Config");
-
                     b.Navigation("Rounds");
                 });
 #pragma warning restore 612, 618

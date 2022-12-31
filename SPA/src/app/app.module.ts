@@ -9,7 +9,6 @@ import { AuthenticationComponent } from 'src/app/authentication/authentication.c
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppTranslationService, TranslateLanguageLoader } from 'src/Services/app-translation.service';
 // import { AuthConfig, OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
-import { AuthStorage } from 'src/Services/auth.storage';
 import { AlertService } from 'src/Services/alert.service';
 import { ConfigurationService } from 'src/Services/configuration.service';
 import { LocalStoreManager } from 'src/Services/local-store-manager.service';
@@ -36,6 +35,7 @@ import { GeneralModalComponent } from './general-modal/general-modal.component';
 import { ToastaModule } from 'ngx-toasta';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar-observables';
 import { LoadingInterceptorService } from 'src/Services/http/loading.interceptor.service';
+import { SignalrService } from 'src/Services/signalr-service';
 
 
 const GUARDS = [GameGuard];
@@ -87,6 +87,7 @@ const GUARDS = [GameGuard];
         AlertService,
         // ThemeManager,
         ConfigurationService,
+        SignalrService,
         // AppTitleService,
         AppTranslationService,
         AlertService,

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Game } from 'src/Types/Game';
+import { UserTypeEnum } from 'src/Types/Hub';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,10 @@ public findByUrlId(urlId: string): Observable<Game> {
 
 public delete(id: string): Observable<void> {
   return this.httpClient.delete<void>(`${this.PATH}/${id}`);
+}
+
+public newUserName(urlId: string, newName: string, userType: UserTypeEnum): Observable<void> {
+  return this.httpClient.put<void>(`${this.PATH}/userName/${urlId}/${newName}/${userType}`, {});
 }
 
 }

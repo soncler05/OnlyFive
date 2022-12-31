@@ -23,6 +23,11 @@ namespace OnlyFive.Types.Helpers
             UserName = "smartNia",
             Email = "smartNia@onlyfive.com",
         };
+        public static ApplicationUser DEFAULT_GUEST_USER => new ApplicationUser
+        {
+            Id= "B8B1D26B-ED7F-4994-81F0-87089D0154AA",
+            UserName = "defaultGuest",
+            Email = "defaultGuest@onlyfive.com",
+        };
     }
-    //await CreateUserAsync("user", "tempP@ss123", "Inbuilt Standard User", "user@ebenmonney.com", "+1 (123) 000-0001", new string[] { Constants.ROLE_USER });
 }

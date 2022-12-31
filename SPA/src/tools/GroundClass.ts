@@ -1,4 +1,5 @@
 import * as FabricJs from 'fabric';
+import { Observable } from 'rxjs';
 import { CanvasProfile } from './canvas-profile';
 import { RealGamePin } from './GamePinClass';
 import { Helper } from './Helper';
@@ -17,32 +18,45 @@ export class GroundClass {
         return this._gamePin; 
     }
     
+    private _newPin: (pin: Pin) => Observable<Pin>;
+    private _onTwoDevicesComplete: (playerId: string) => void;
     private readonly _host: Player;
     private readonly _guest: Player;
+    private get Players() : Player[] {
+        return [this._host, this._guest];
+    }
+    private readonly _deviceId: string;
+    private readonly _isOneDevice: boolean;;
     // private play: (pin: Pin) => void;
     // width = 2000;
     // height = 1600;
     // private sideUnit: number = 10; 
     private next: (winner) => void;
-    public onComplete: (winner) => void;
+    public onComplete: (winnerId: string) => void;
 
     private tmp: FabricJs.fabric.Object;
     private lastPin: FabricJs.fabric.Object;
     minimap: MinimapClass;
 
     getPlayer(playerId: string): Player{
-        return [this._host, this._guest].find(x => x.playerId == playerId);
+        return Helper.PLAYERS.find(x => x.playerId == playerId);
     }
 
     /**
      *
      */
-    constructor(host: Player, guest: Player, next: (winner) => void, onComplete: (winner) => void) {
+    constructor(host: Player, guest: Player, isOneDevice: boolean, deviceId: string, next: (winner) => void, onComplete: (winnerId: string) => void,
+        newPin: (pin: Pin) => Observable<Pin>, onTwoDevicesComplete: (playerId: string) => void) {
     
+        this._newPin = newPin;
         this._host = host;
         this._guest = guest;
+                
+        this._deviceId = deviceId;
         this.next = next;
         this.onComplete = onComplete;
+        this._onTwoDevicesComplete = onTwoDevicesComplete;
+        this._isOneDevice = isOneDevice;
         // this.setProfile();
         this.canvas = new  FabricJs.fabric.Canvas('c', 
         {
@@ -65,7 +79,7 @@ export class GroundClass {
 
         this.minimap = new MinimapClass(this.canvas);
 
-        this._gamePin.automaticPlay();
+        if(this._isOneDevice) this._gamePin.automaticPlay();
     }
 
     private setBackgroundImage() {
@@ -86,7 +100,24 @@ export class GroundClass {
 
     
     private get playerTurn() : Player {
-        return this._host.currentTurn ? this._host : this._guest;
+        if(this._isOneDevice)
+            return this._host.currentTurn ? this._host : this._guest;
+        
+        const lastPin = this.lastPlay();
+        if(!lastPin) return this._host;
+        return this.Players.find(p => p.playerId != lastPin.playerId);
+    }
+    private lastPlay(): Pin {
+        return this.gamePin.pins[this.gamePin.pins.length - 1];
+    }
+    private findPlayer(playerId: string): Player {
+        return this.Players.find(p => p.playerId == playerId)
+    }
+    private get actualPlayer() : Player {
+        if(this._isOneDevice) return this.playerTurn;
+        if( this._host.deviceId === this._deviceId) return this._host;
+        if( this._guest.deviceId === this._deviceId) return this._guest;
+        return null;
     }
 
     onResize() {
@@ -129,7 +160,7 @@ export class GroundClass {
         let result = this.calculatePosition(pinPointer.x, pinPointer.y); 
     
         if(this.tmp) this.canvas.remove(this.tmp);
-        this.tmp = this.addCirclePin(result.left, result.top, this.playerTurn.color, 0.4);
+        this.tmp = this.addCirclePin(result.left, result.top, this.actualPlayer.color, 0.4);
     
     }
 
@@ -138,6 +169,9 @@ export class GroundClass {
     }
 
     private OnMouseUp (options) {
+        if(!this._isOneDevice && this.playerTurn.deviceId != this._deviceId)
+            return;
+            
         var pointer = this.canvas.getPointer(options.e);
         let pinPointer = this.convertPinToUnit({x: pointer.x, y: pointer.y} as Pin);
         var result = this.calculatePosition(pinPointer.x, pinPointer.y); 
@@ -207,49 +241,49 @@ export class GroundClass {
 
     
     
-  private play(pin: Pin) {
+  public play(pin: Pin) {
     
-    var circleResult = this.addCirclePin(pin.x, pin.y, this.playerTurn.color);
-    if (!circleResult) return circleResult;
+        var circleResult = this.addCirclePin(pin.x, pin.y, this.playerTurn.color);
+        if(!circleResult) return circleResult;
 
-    if(this.lastPin) this.canvas.remove(this.lastPin);
-    this.lastPin = this.addLastCircle(pin.x, pin.y, this.playerTurn.color);
+        if(this.lastPin) this.canvas.remove(this.lastPin);
+        this.lastPin = this.addLastCircle(pin.x, pin.y, this.playerTurn.color);
 
-    pin.playerId = this.playerTurn.playerId;
-    pin.id = this._gamePin.pins.length;
+        pin.playerId = this.playerTurn.playerId;
+        pin.id = this._gamePin.pins.length;
+        pin.date = this._isOneDevice ? new Date() : null;
 
-    this._gamePin.pushPin(pin);
-        
-    var alignPins = this._gamePin.isComplete(pin); 
-    if (alignPins) {
-        const player = this.getPlayer(alignPins[0].playerId);
-        this.onComplete(player.userName);
-        this.addLine(alignPins[0], alignPins[alignPins.length-1], player.color);
-        this._gamePin.isEnded = true;
-    }
-
-    this._gamePin.changePlayer();
-    this._gamePin.automaticPlay();
-
-    return circleResult;
-  }
-
-
-    private changeTurn() {
-        if (this._host === this.playerTurn) {
-            this._host.currentTurn = false;
-            this._guest.currentTurn = true;
-        } else {
-            this._host.currentTurn = true;
-            this._guest.currentTurn = false;
+        if(this._isOneDevice || this.findPlayer(pin.playerId)?.deviceId != this._deviceId) return this.playAction(pin, circleResult);
+        else {
+            this._newPin(pin).subscribe((data) => {
+                this.playAction(data, circleResult);
+            })
         }
     }
 
-    
+    private playAction(pin: Pin, circleResult: any) {
+        
+        this._gamePin.pushPin(pin);
+            
+        var alignPins = this._gamePin.isComplete(pin); 
+        if (alignPins) {
+            const player = this.getPlayer(alignPins[0].playerId);
+            this.onComplete(player.playerId);
+            this.addLine(alignPins[0], alignPins[alignPins.length-1], player.color);
+            this._gamePin.isEnded = true;
+            if(!this._isOneDevice) this._onTwoDevicesComplete(pin.playerId);
+        }
+
+        this._gamePin.changePlayer();
+        if(this._isOneDevice) this._gamePin.automaticPlay();
+
+        return circleResult;
+    }
+
     private addLine(pinFirst: Pin, pinLast: Pin, color='black') {
         let pinFirstToAdd = this.convertPinToUnit(pinFirst, true);
         let pinLastToAdd = this.convertPinToUnit(pinLast, true);
-        var playerTurn = this.playerTurn;
+        var playerTurn = this.findPlayer(this.lastPlay().playerId);
         this.winningLine = new FabricJs.fabric.Line([pinFirstToAdd.x, pinFirstToAdd.y, pinFirstToAdd.x, pinFirstToAdd.y], {
         stroke: color,
         strokeWidth: 3,
@@ -345,7 +379,7 @@ export class GroundClass {
         this._gamePin.clearGroups();
         this._gamePin.setAutomaticPlayerTurn();
         this._gamePin.isEnded = false;
-        this._gamePin.automaticPlay();
+        if(this._isOneDevice) this._gamePin.automaticPlay();
         console.log("isEnded->",this._gamePin.isEnded);
         
     }

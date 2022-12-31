@@ -1,13 +1,11 @@
 import { OnInit } from '@angular/core';
-import { Component, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastaConfig, ToastaService, ToastData, ToastOptions } from 'ngx-toasta';
 import { AlertCommand, AlertDialog, AlertService, DialogType, MessageSeverity } from 'src/Services/alert.service';
 import { AppTranslationService } from 'src/Services/app-translation.service';
 import { AuthService } from 'src/Services/auth.service';
-import { LocalStoreManager } from 'src/Services/local-store-manager.service';
-import { Helper } from 'src/tools/Helper';
-import { DBkeys } from 'src/Utilities/db-keys';
+import { SignalrService } from 'src/Services/signalr-service';
 
 const alertify: any = require('../assets/scripts/alertify.js');
 @Component({
@@ -22,17 +20,16 @@ export class AppComponent implements OnInit {
   /**
    *
    */
-  constructor(public router: Router, private authService: AuthService, 
-    private translationService: AppTranslationService, private alertService: AlertService, private localStorage: LocalStoreManager,
+  constructor(public router: Router, private authService: AuthService,  private signalServ: SignalrService,
+    private translationService: AppTranslationService, private alertService: AlertService,
     private toastaService: ToastaService, private toastaConfig: ToastaConfig,) {
     this.toastaConfig.theme = 'bootstrap';
     this.toastaConfig.position = 'top-right';
     this.toastaConfig.limit = 100;
     this.toastaConfig.showClose = true;
     this.toastaConfig.showDuration = false;
-    if(localStorage.exists(DBkeys.CURRENT_USER)){
-      Helper.DEFAULT_PLAYER.userName = localStorage.getData(DBkeys.CURRENT_USER);
-    }
+    
+    signalServ.startConnection();  
   }
   ngOnInit(): void {
     this.alertService.getDialogEvent().subscribe(alert => this.showDialog(alert));

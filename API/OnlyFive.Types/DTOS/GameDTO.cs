@@ -1,9 +1,6 @@
 ﻿using OnlyFive.Types.Core.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlyFive.Types.DTOS
 {
@@ -21,6 +18,8 @@ namespace OnlyFive.Types.DTOS
         public int GuestScore { get; set; }
         public GameRoundsEnum GameRound { get; set; }
         public int LastRoundOffset { get; set; }
+        public string HostName { get; set; }
+        public string GuestName { get; set; }
 
         public ApplicationUserDTO Host { get; set; }
         public ApplicationUserDTO Guest { get; set; }

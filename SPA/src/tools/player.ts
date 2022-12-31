@@ -3,7 +3,7 @@ export interface Player {
     name: string;
     userName: string;
     color: string;
-    device: string;
+    deviceId: string;
     currentTurn: boolean;
 }
 

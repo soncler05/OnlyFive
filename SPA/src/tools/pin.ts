@@ -1,8 +1,7 @@
 export interface Pin extends BasePin {
-    // x: number;
-    // y: number;
     id: number;
     playerId: string;
+    date: Date;
 }
 export interface PinGroup extends BasePin {
     pinIds: number[];

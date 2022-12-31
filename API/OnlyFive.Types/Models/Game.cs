@@ -1,9 +1,6 @@
 ﻿using OnlyFive.Types.Core.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlyFive.Types.Models
 {
@@ -25,5 +22,6 @@ namespace OnlyFive.Types.Models
         public virtual ApplicationUser Host { get; set; }
         public virtual ApplicationUser Guest { get; set; }
         public virtual ICollection<Round> Rounds { get; set; }
+        public virtual Config Config { get; set; }
     }
 }

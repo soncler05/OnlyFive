@@ -1,10 +1,7 @@
 using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +13,7 @@ using OnlyFive.Business;
 using OnlyFive.Business.Authorization;
 using OnlyFive.BusinessInterface;
 using OnlyFive.Extensions;
-using OnlyFive.ExternalProviders;
+using OnlyFive.Hubs;
 using OnlyFive.Repository;
 using OnlyFive.RepositoryInterface;
 using OnlyFive.Types.Helpers;
@@ -24,8 +21,6 @@ using OnlyFive.Types.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlyFive
 {
@@ -120,6 +115,7 @@ namespace OnlyFive
             services.AddCors();
 
             services.AddControllers();
+            services.AddSignalR(options => options.EnableDetailedErrors = true);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = IdentityServerConfig.ApiFriendlyName, Version = "v1" });
@@ -160,6 +156,7 @@ namespace OnlyFive
             services.AddTransient<IAccountManagerBusiness, AccountManagerBusiness> ();
 
             services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<IConfigRepository, ConfigRepository>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IRoundRepository, RoundRepository>();
             services.AddTransient<IRoundService, RoundService>();
@@ -198,6 +195,7 @@ namespace OnlyFive
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<RoomHub>("/room");
             });
 
             if (env.IsDevelopment())

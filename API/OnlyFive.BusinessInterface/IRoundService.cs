@@ -1,4 +1,5 @@
 ﻿using OnlyFive.Types.DTOS;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace OnlyFive.BusinessInterface
@@ -8,5 +9,7 @@ namespace OnlyFive.BusinessInterface
         Task<RoundDTO> Create(RoundDTO entity);
         Task Update(RoundDTO entity);
         Task SaveLast(LastRoundDTO entity);
+        Task<JsonObject> SaveNewPin(NewPinDTO entity, bool isLastPin = false);
+        Task CompleteRound(CompleteRoundDTO entity);
     }
 }

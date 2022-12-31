@@ -37,6 +37,14 @@ export class ConfigurationService {
     return this._language || ConfigurationService.defaultLanguage;
   }
 
+  get deviceId() {
+    return this._deviceId;
+  }
+
+  get userName() {
+    return this.localStorage.getDataObject<string>(DBkeys.CURRENT_USER);
+  }
+
 
   // set themeId(value: number) {
   //   value = +value;
@@ -49,7 +57,7 @@ export class ConfigurationService {
   // }
 
 
-  set homeUrl(value: string) {
+  set homeUrl(value: string) {  
     this._homeUrl = value;
     this.saveToLocalStore(value, DBkeys.HOME_URL);
   }
@@ -111,6 +119,7 @@ export class ConfigurationService {
   // ***End of defaults***
 
   private _language: string = null;
+  private _deviceId: string = null;
   private _homeUrl: string = null;
   private _themeId: number = null;
   private _showDashboardStatistics: boolean = null;
@@ -132,6 +141,12 @@ export class ConfigurationService {
       this.resetLanguage();
     }
 
+    if(this.localStorage.exists(DBkeys.UUID)) 
+      this._deviceId = this.localStorage.getDataObject<string>(DBkeys.UUID)
+    else {
+      this._deviceId = crypto.randomUUID();
+      this.saveToLocalStore(this._deviceId, DBkeys.UUID);
+    }
 
     // if (this.localStorage.exists(DBkeys.THEME_ID)) {
     //   this._themeId = this.localStorage.getDataObject<number>(DBkeys.THEME_ID);
