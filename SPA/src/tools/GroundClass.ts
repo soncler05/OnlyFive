@@ -18,6 +18,7 @@ export class GroundClass {
         return this._gamePin; 
     }
     
+    private isPlaying: boolean = false;
     private _newPin: (pin: Pin) => Observable<Pin>;
     private _onTwoDevicesComplete: (playerId: string) => void;
     private readonly _host: Player;
@@ -26,11 +27,7 @@ export class GroundClass {
         return [this._host, this._guest];
     }
     private readonly _deviceId: string;
-    private readonly _isOneDevice: boolean;;
-    // private play: (pin: Pin) => void;
-    // width = 2000;
-    // height = 1600;
-    // private sideUnit: number = 10; 
+    private readonly _isOneDevice: boolean;
     private next: (winner) => void;
     public onComplete: (winnerId: string) => void;
 
@@ -169,7 +166,7 @@ export class GroundClass {
     }
 
     private OnMouseUp (options) {
-        if(!this._isOneDevice && this.playerTurn.deviceId != this._deviceId)
+        if(this.isPlaying || (!this._isOneDevice && this.playerTurn.deviceId != this._deviceId))
             return;
             
         var pointer = this.canvas.getPointer(options.e);
@@ -242,9 +239,12 @@ export class GroundClass {
     
     
   public play(pin: Pin) {
-    
+        this.isPlaying = true;
         var circleResult = this.addCirclePin(pin.x, pin.y, this.playerTurn.color);
-        if(!circleResult) return circleResult;
+        if(!circleResult) {
+            this.isPlaying = false;
+            return circleResult;
+        }
 
         if(this.lastPin) this.canvas.remove(this.lastPin);
         this.lastPin = this.addLastCircle(pin.x, pin.y, this.playerTurn.color);
@@ -253,10 +253,15 @@ export class GroundClass {
         pin.id = this._gamePin.pins.length;
         pin.date = this._isOneDevice ? new Date() : null;
 
-        if(this._isOneDevice || this.findPlayer(pin.playerId)?.deviceId != this._deviceId) return this.playAction(pin, circleResult);
+        if(this._isOneDevice || this.findPlayer(pin.playerId)?.deviceId != this._deviceId) 
+        {
+            this.isPlaying = false;
+            return this.playAction(pin, circleResult);
+        }
         else {
             this._newPin(pin).subscribe((data) => {
                 this.playAction(data, circleResult);
+                this.isPlaying = false;
             })
         }
     }
