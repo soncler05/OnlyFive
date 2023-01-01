@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
 
     switch (dialog.type) {
       case DialogType.alert:
-        alertify.alert(dialog.message);
+        alertify.alert(dialog.message, dialog.okCallback);
 
         break;
       case DialogType.confirm:
