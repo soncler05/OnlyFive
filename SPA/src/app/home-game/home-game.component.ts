@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { ComponentHelper } from 'src/helpers/component-helper';
+import { ComponentHelper } from 'src/helpers/component-helper';  
 import { AppTranslationService } from 'src/Services/app-translation.service';
 import { ConfigurationService } from 'src/Services/configuration.service';
 import { GameManagerService } from 'src/Services/game-manager.service';
@@ -26,7 +26,7 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
   public guestObs: ReplaySubject<HubNewGuest> = new ReplaySubject<HubNewGuest>();
   
   constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService, 
-    private localStorage: LocalStoreManager, private modalService: BsModalService, private signalServ: SignalrService, private configurations: ConfigurationService, ) {
+    private localStorage: LocalStoreManager, private modalService: BsModalService, private signalServ: SignalrService, private configurations: ConfigurationService) {
       super();
       const game = gameManagerServ.game;
 
@@ -130,5 +130,10 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
   }
   public closeLoadingModal() {
     this.bsModalRef.hide();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.gameManagerServ.isStarted = false;
   }
 }

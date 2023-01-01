@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { Observable, Subject } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { AlertService, DialogType } from "src/Services/alert.service";
 import { AppTranslationService } from "src/Services/app-translation.service";
@@ -26,6 +26,12 @@ export class GameGuard implements CanActivate {
         const urlId = route.params.urlId;
         return this.gameServ.findByUrlId(urlId).pipe(map(result => {
             this.game = result;
+
+            if(!this.game) {
+                this.router.navigate(['/']); 
+                return false;
+            }
+
             if(this.game.host) {
                 this.game.host.deviceId = this.game.hostDevice;
                 this.game.host = Helper.completePlayerInfo(this.game.host);
@@ -46,10 +52,10 @@ export class GameGuard implements CanActivate {
         if(!this.ended){
             return true;
         } else {
-            this.alertService.showDialog(this.appTranslationServ.getTranslation("game:End"), DialogType.alert, () => {
+            this.alertService.showDialog(this.appTranslationServ.getTranslation("game.End"), DialogType.alert, () => {
                 this.router.navigate(['/']); 
-                return false;
             })
+            return false;
         }
     }
 }
