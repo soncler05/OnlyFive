@@ -36,6 +36,7 @@ namespace OnlyFive.Repository
             return await _context.Set<Game>()
                 .Include(g => g.Host).Include(g => g.Guest)
                 .Include(g => g.Config)
+                .Include(g => g.Rounds)
                 .FirstOrDefaultAsync(e => e.UrlId == urlId);
         }
         public async Task Update(Game entity)

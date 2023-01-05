@@ -58,7 +58,6 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
 
         this.openLoadingModal();
         this.guestObs.pipe(takeUntil(this.unsubscribe$), take(1)).subscribe((data) => {
-          // if(this.currentUserId != data.playerId) {
             const additionalData = Helper.PLAYERS.find(p => p.playerId === data.playerId);
             this.gameManagerServ.game.guest = additionalData;
             this.gameManagerServ.game.guest.name = data.userName;
@@ -66,11 +65,9 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
             this.gameManagerServ.game.guest.deviceId = data.deviceId;
             this.gameManagerServ.game.guestId = data.playerId;
             this.gameManagerServ.game.guestDevice = data.deviceId;
-          //   console.log('home-game ---->',this.gameManagerServ.game)
-          // }
-          this.gameManagerServ.start();
-          this.closeLoadingModal();
-    
+
+            this.gameManagerServ.start();
+            this.closeLoadingModal();
         })
       } 
       else {
@@ -122,6 +119,12 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.gameManagerServ.ground.onResize();
+  }
+  
+  @HostListener('window:focus', ['$event'])
+  onFocus(event) {
+    console.log("focusssssss!");
+    
   }
 
   bsModalRef?: BsModalRef;

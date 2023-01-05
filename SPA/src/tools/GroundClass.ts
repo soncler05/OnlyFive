@@ -1,5 +1,6 @@
 import * as FabricJs from 'fabric';
 import { Observable } from 'rxjs';
+import { Game } from 'src/Types/Game';
 import { CanvasProfile } from './canvas-profile';
 import { RealGamePin } from './GamePinClass';
 import { Helper } from './Helper';
@@ -38,16 +39,16 @@ export class GroundClass {
     getPlayer(playerId: string): Player{
         return Helper.PLAYERS.find(x => x.playerId == playerId);
     }
-
+    _game: Game;
     /**
      *
      */
-    constructor(host: Player, guest: Player, isOneDevice: boolean, deviceId: string, next: (winner) => void, onComplete: (winnerId: string) => void,
+    constructor(game: Game, isOneDevice: boolean, deviceId: string, next: (winner) => void, onComplete: (winnerId: string) => void,
         newPin: (pin: Pin) => Observable<Pin>, onTwoDevicesComplete: (playerId: string) => void) {
     
         this._newPin = newPin;
-        this._host = host;
-        this._guest = guest;
+        this._host = game.host;
+        this._guest = game.guest;
                 
         this._deviceId = deviceId;
         this.next = next;
@@ -77,6 +78,10 @@ export class GroundClass {
         this.minimap = new MinimapClass(this.canvas);
 
         if(this._isOneDevice) this._gamePin.automaticPlay();
+        else if(game.lastRound && !game.lastRound.endDate && game.lastRound.pawnMap?.length > 0 ){
+            const pins = JSON.parse(game.lastRound.pawnMap) as Pin[];
+            this.initMapWithPins(pins);
+        }
     }
 
     private setBackgroundImage() {
@@ -236,7 +241,21 @@ export class GroundClass {
         return circle;
     }
 
-    
+  initMapWithPins(pins: Pin[]) {
+     if(pins.length > 0) {
+        const colors : Record <string, string> = {};
+        this.Players.forEach(player => {
+            colors[player.playerId] = player.color;
+        });
+        
+        pins.forEach(pin => {
+            this.addCircle(this.convertPinToUnit(pin, true), colors[pin.playerId], 1);
+            this.gamePin.pushPin(pin);
+        });
+        const lastPin = pins[pins.length - 1];
+        this.lastPin = this.addLastCircle(lastPin.x, lastPin.y, colors[lastPin.playerId]);
+     }
+  }  
     
   public play(pin: Pin) {
         this.isPlaying = true;

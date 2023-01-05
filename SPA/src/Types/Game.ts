@@ -18,6 +18,7 @@ export class Game {
     hostScore: number;
     guestScore: number;
     lastRoundOffset: number;
+    lastRound: Round;
 }
 export class Round {
     offset: number;

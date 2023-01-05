@@ -23,6 +23,6 @@ namespace OnlyFive.Types.DTOS
 
         public ApplicationUserDTO Host { get; set; }
         public ApplicationUserDTO Guest { get; set; }
-        public List<RoundDTO> Rounds { get; set; }
+        public RoundDTO LastRound { get; set; }
     }
 }

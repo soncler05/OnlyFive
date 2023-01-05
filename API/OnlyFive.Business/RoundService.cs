@@ -89,6 +89,8 @@ namespace OnlyFive.Business
                 if ((int)game.GameRound == entity.Offset)
                 {
                     game.EndDate = now;
+                    if (game.HostId == entity.PlayerId) game.HostScore++;
+                    else if (game.GuestId == entity.PlayerId) game.GuestScore++;
                     await _gameRepository.Update(game);
                 }
             }

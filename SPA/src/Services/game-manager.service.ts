@@ -73,11 +73,11 @@ next(winner = null){
   this.host = this.game.host;
   this.guest = this.game.guest;
   if (gameNumber < +this.game.gameRound) {
-    this.game.lastRoundOffset++;
+    if(this.game.lastRound == null || this.game.lastRound.endDate != null) this.game.lastRoundOffset++;
     this.host.currentTurn = true;
     this.guest.currentTurn = false;
     if (!this.ground)
-      this.ground = new GroundClass(this.host, this.guest, this.isOneDevice, this.configurations.deviceId, this.next.bind(this), 
+      this.ground = new GroundClass(this.game, this.isOneDevice, this.configurations.deviceId, this.next.bind(this), 
       this.openRoundCompletedModal.bind(this), this.newPin.bind(this), this.onTwoDevicesComplete.bind(this));
     else
       this.ground.newGame();

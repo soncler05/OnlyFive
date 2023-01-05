@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OnlyFive.Types.DTOS;
 using OnlyFive.Types.Models;
+using System.Linq;
 
 namespace ExampleAngularCore.ViewModels
 {
@@ -37,7 +38,8 @@ namespace ExampleAngularCore.ViewModels
                 .ForMember(d => d.Guest, map => map.MapFrom(o => o.Guest))
                 .ForMember(d => d.HostName, map => map.MapFrom(o => o.Config == null ? null : o.Config.HostName))
                 .ForMember(d => d.GuestName, map => map.MapFrom(o => o.Config == null ? null : o.Config.GuestName))
-                .ForMember(d => d.Rounds, map => map.MapFrom(o => o.Rounds));
+                .ForMember(d => d.LastRound, map => map.MapFrom(o => o.Rounds == null ? null : o.Rounds.LastOrDefault()))
+                ;
 
             CreateMap<GameDTO, Game>()
                 .ForMember(des => des.Host, src => src.Ignore())
