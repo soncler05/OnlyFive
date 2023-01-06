@@ -22,6 +22,10 @@
         "Sorry": "Lástima, perdiste.",
         "End": "Juego terminado"
     },
+    "hub":{
+        "Disconnected": "Has sido desconectada de la sala de juego, favor de hacer click en el botón de advertencia para reestablecer la conexión.",
+        "Reconnect": "Reestablecer conexión"
+    },
     "modal":{
         "Confirm": "Confirmar",
         "Cancel": "Cancelar"

@@ -27,9 +27,7 @@ export class AppComponent implements OnInit {
     this.toastaConfig.position = 'top-right';
     this.toastaConfig.limit = 100;
     this.toastaConfig.showClose = true;
-    this.toastaConfig.showDuration = false;
-    
-    signalServ.startConnection();  
+    this.toastaConfig.showDuration = false; 
   }
   ngOnInit(): void {
     this.alertService.getDialogEvent().subscribe(alert => this.showDialog(alert));

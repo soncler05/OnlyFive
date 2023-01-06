@@ -20,6 +20,12 @@
        <a class="edit-username" (click)="editUserName(game.guest.playerId)" *ngIf="game.guestDevice === deviceId"><i class="fa fa-pencil"></i></a>
     </span>
   </span>
+  
+  <span class="ml-3" *ngIf="!isOneDevice" >
+    <i class="fa fa-wifi fa-lg" *ngIf="isConnectedToHub"></i>
+    <button type="button" *ngIf="!isConnectedToHub" class="btn btn-primary btn-sm" (click)="reload()" data-toggle="tooltip" data-placement="right" [attr.title]="'hub.Reconnect' | translate">
+      <i class="fa fa-exclamation-triangle fa-lg text-warning"></i></button>
+  </span>
 
   <div class="spacer"></div>
 

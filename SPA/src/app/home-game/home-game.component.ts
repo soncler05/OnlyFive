@@ -52,6 +52,8 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
     if (this.gameManagerServ.isOneDevice) {  
       this.gameManagerServ.start();
     } else {
+      
+      this.signalServ.startConnection();
       this.signalServ.listenRoom(urlId, this.currentUserId, this.configurations.deviceId, this.configurations.userName, this.hubCallbacks);
       
       if (!this.gameManagerServ.game.guest) {
@@ -138,5 +140,6 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.gameManagerServ.isStarted = false;
+    if(this.signalServ.isConnected) this.signalServ.stopConnection();
   }
 }

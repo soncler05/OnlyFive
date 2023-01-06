@@ -22,6 +22,10 @@
         "Sorry": "Dezole, ou pèdi!",
         "End": "Jwèt la fini"
     },
+    "hub":{
+        "Disconnected": "Ou dekonekte  nan jwèt la, tanpri klike nan bouton avètisman an pou w retabli koneksyon an",
+        "Reconnect": "Retabli koneksyon an"
+    },
     "modal":{
         "Confirm": "Konfime",
         "Cancel": "Anile"

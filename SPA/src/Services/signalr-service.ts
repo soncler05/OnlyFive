@@ -1,11 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, Subject } from "rxjs";
 import { take } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { Helper } from "src/tools/Helper";
-import { Hub, HubCallback, HubDataTypeEnum, HubNewGuest } from "src/Types/Hub";
+import { Hub, HubCallback } from "src/Types/Hub";
 
 export abstract class SignalrClassData {
   abstract stopConnection(): void;
@@ -15,35 +14,48 @@ export abstract class SignalrClassData {
 @Injectable()
 export class SignalrService extends SignalrClassData {
 
-  private hubConnection: signalR.HubConnection;
-  private readonly MAIN_STREAM = "mainStream"; 
-  public connectionObs: ReplaySubject<void> = new ReplaySubject<void>();
-
   linkConnection: string = environment.baseUrl.substring(0, environment.baseUrl.length - 4) + '/room';
+  private hubConnection: signalR.HubConnection = new signalR.HubConnectionBuilder()
+  // .configureLogging(LogLevel.Debug)
+  .withUrl(this.linkConnection,
+    {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets,
+      // accessTokenFactory: () => token.getValue(),
+    }
+  )
+  .build();
+  private readonly MAIN_STREAM = "mainStream"; 
+  private _isConnected = false;
+  public connectionObs: Subject<boolean> = new Subject<boolean>();
+  
+  public get isConnected() : boolean {
+    return this._isConnected;
+  }
+  
+
   constructor(private http: HttpClient 
     // , private tokenServ: NbTokenStorage
     ) {
     super();
+    this.hubConnection.onclose((error) => {
+      this._isConnected = false;
+      this.connectionObs.next(this.isConnected);
+    });
+    this.hubConnection.onreconnected((error) => {
+      this._isConnected = true;
+    });
   }
 
   startConnection = async () => {
     // const token = this.tokenServ.get();
     Object.defineProperty(WebSocket, 'OPEN', { value: 1, });
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      // .configureLogging(LogLevel.Debug)
-      .withUrl(this.linkConnection,
-        {
-          skipNegotiation: true,
-          transport: signalR.HttpTransportType.WebSockets,
-          // accessTokenFactory: () => token.getValue(),
-        }
-      )
-      .build();
 
     await this.hubConnection
       .start()
       .then(() => {
-        this.connectionObs.next();
+        this._isConnected = true;
+        this.connectionObs.next(this.isConnected);
         console.log('Connection started');
       })
       .catch(err => console.log('Error while starting connection: ' + err));

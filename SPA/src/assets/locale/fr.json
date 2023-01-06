@@ -22,6 +22,10 @@
         "Sorry": "Désolé, t'as perdu.",
         "End": "Jeu terminé"
     },
+    "hub":{
+        "Disconnected": "Tu as été deconneté de la salle de de jeu, tu es prié de clicker sur le bouton d'avertissement pour rétablir la connexion",
+        "Reconnect": "Rétablir la connexion"
+    },
     "modal":{
         "Confirm": "Confirmer",
         "Cancel": "Annuler"

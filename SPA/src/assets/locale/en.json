@@ -24,6 +24,10 @@
         "Sorry": "Sorry, you lost.",
         "End": "Game ended"
     },
+    "hub":{
+        "Disconnected": "You have been disconnected to the room, please click on the warning button to reconnect.",
+        "Reconnect": "Click to reconnect"
+    },
     "modal":{
         "Confirm": "Confirm",
         "Cancel": "Cancel"

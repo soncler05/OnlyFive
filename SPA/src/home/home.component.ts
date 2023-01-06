@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public currentLanguage = "";
   public deviceId = "";
   gameTypes = GameRoundsEnum; 
+  public isReload = false;
 
   constructor(public configurations: ConfigurationService, private elementRef: ElementRef, private gameServ: GameService, private router:Router, 
     private localStorage: LocalStoreManager,
@@ -31,6 +32,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   
   ngOnInit() {
+    const state = this.router.getCurrentNavigation()?.extras?.state;
+    this.isReload = state ? true : false;
     this.currentLanguage = this.configurations.language;
     this.deviceId = this.configurations.deviceId;
     
