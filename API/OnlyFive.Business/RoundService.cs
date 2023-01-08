@@ -86,13 +86,14 @@ namespace OnlyFive.Business
                 var now = DateTime.UtcNow;
                 round.EndDate = now;
                 await _repository.Update(round);
+
+                if (game.HostId == entity.PlayerId) game.HostScore++;
+                else if (game.GuestId == entity.PlayerId) game.GuestScore++;
+
                 if ((int)game.GameRound == entity.Offset)
-                {
                     game.EndDate = now;
-                    if (game.HostId == entity.PlayerId) game.HostScore++;
-                    else if (game.GuestId == entity.PlayerId) game.GuestScore++;
-                    await _gameRepository.Update(game);
-                }
+
+                await _gameRepository.Update(game);
             }
             else throw new Exception("Could not complete round");
         }
