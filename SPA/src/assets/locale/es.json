@@ -20,7 +20,10 @@
         "BackHome": "Página principal",
         "Congrats": "¡Felicidades, ganaste!",
         "Sorry": "Lástima, perdiste.",
-        "End": "Juego terminado"
+        "End": "Juego terminado",
+        "ShareUrl": "Comparte la liga siguiente con otra persona para iniciar el juego",
+        "Copy": "Copiar",
+        "Loading": "Cargando..."
     },
     "hub":{
         "Disconnected": "Has sido desconectada de la sala de juego, favor de hacer click en el botón de advertencia para reestablecer la conexión.",

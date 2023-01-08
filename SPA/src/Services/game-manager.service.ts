@@ -77,7 +77,7 @@ next(winner = null){
     this.host.currentTurn = true;
     this.guest.currentTurn = false;
     if (!this.ground)
-      this.ground = new GroundClass(this.game, this.isOneDevice, this.configurations.deviceId, this.next.bind(this), 
+      this.ground = new GroundClass(this.game, this.isOneDevice, this.configurations.deviceId, this.currentPlayer.playerId, this.next.bind(this), 
       this.openRoundCompletedModal.bind(this), this.newPin.bind(this), this.onTwoDevicesComplete.bind(this));
     else
       this.ground.newGame();
@@ -108,6 +108,11 @@ public  get PLAYERS() : Player[] {
 public  getUserName(playerId: string) : string {
   if(playerId === this.game.host.playerId) return this.game.hostName;
   if(playerId === this.game.guest.playerId) return this.game.guestName;
+  return null;
+}
+public get currentPlayer() : Player {
+  if( this.host.deviceId === this.configurations.deviceId) return this.game.host;
+  if( this.guest.deviceId === this.configurations.deviceId) return this.game.guest;
   return null;
 }
 

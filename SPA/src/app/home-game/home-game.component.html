@@ -14,7 +14,20 @@
 
 
 <ng-template #loadingModal>
-    <h1 class="text-center">Loading...</h1>
+    <div *ngIf="currentDeviceId == hostDeviceId">
+        <h5 class="text-center">{{'game.ShareUrl' | translate}}</h5>
+        <div class="form-row p-2">
+            <div class="input-group m-3">
+                <input type="text" class="form-control" [value]="currentUrl" placeholder="Recipient's username" disabled aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-clipboard" aria-hidden="true" (click)="copyUrl()"></i></button>
+                </div>
+            </div>
+        </div> 
+    </div>   
+    <div *ngIf="currentDeviceId != hostDeviceId">
+        <h5 class="text-center">{{'game.Loading' | translate}}</h5>
+    </div>   
 </ng-template>
 
 <div style="margin: 0;">

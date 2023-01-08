@@ -10,7 +10,7 @@
   <span *ngIf="isStarted">({{game.lastRoundOffset + '/' + game.gameRound}})
     <span>
       {{game.hostName}} 
-      <a class="edit-username" (click)="editUserName(game.host.playerId)" *ngIf="game.hostDevice === deviceId"><i class="fa fa-pencil"></i></a>
+      <a class="edit-username" (click)="editUserName(game.host.playerId)" *ngIf="!isOneDevice && game.hostDevice === deviceId"><i class="fa fa-pencil"></i></a>
       <span class="score" [ngStyle]="{'background-color':game.host.color}">{{hostScore}}</span>
     </span>
     <span>&nbsp; - &nbsp;</span>

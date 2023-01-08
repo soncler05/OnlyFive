@@ -9,6 +9,7 @@ import { Pin } from './pin';
 import { Player } from './player';
 
 export class GroundClass {
+    private _actualPlayerId: string;
     canvas: FabricJs.fabric.Canvas;
     private readonly BIG_SCREEN_MIN_HEIGHT = 768;
     private readonly _gamePin: RealGamePin;
@@ -43,12 +44,13 @@ export class GroundClass {
     /**
      *
      */
-    constructor(game: Game, isOneDevice: boolean, deviceId: string, next: (winner) => void, onComplete: (winnerId: string) => void,
+    constructor(game: Game, isOneDevice: boolean, deviceId: string, actualPlayerId: string, next: (winner) => void, onComplete: (winnerId: string) => void,
         newPin: (pin: Pin) => Observable<Pin>, onTwoDevicesComplete: (playerId: string) => void) {
     
         this._newPin = newPin;
         this._host = game.host;
         this._guest = game.guest;
+        this._actualPlayerId = actualPlayerId;
                 
         this._deviceId = deviceId;
         this.next = next;
@@ -116,10 +118,9 @@ export class GroundClass {
         return this.Players.find(p => p.playerId == playerId)
     }
     private get actualPlayer() : Player {
-        if(this._isOneDevice) return this.playerTurn;
-        if( this._host.deviceId === this._deviceId) return this._host;
-        if( this._guest.deviceId === this._deviceId) return this._guest;
-        return null;
+      if (this._host.deviceId === this._deviceId) return this._host;
+      if (this._guest.deviceId === this._deviceId) return this._guest;
+      return null;
     }
 
     onResize() {

@@ -4,6 +4,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { ComponentHelper } from 'src/helpers/component-helper';  
+import { AlertService, MessageSeverity } from 'src/Services/alert.service';
 import { AppTranslationService } from 'src/Services/app-translation.service';
 import { ConfigurationService } from 'src/Services/configuration.service';
 import { GameManagerService } from 'src/Services/game-manager.service';
@@ -11,6 +12,7 @@ import { LocalStoreManager } from 'src/Services/local-store-manager.service';
 import { SignalrService } from 'src/Services/signalr-service';
 import { Helper } from 'src/tools/Helper';
 import { Pin } from 'src/tools/pin';
+import { Player } from 'src/tools/player';
 import { HubCallback, HubDataTypeEnum, HubNewGuest, HubNewUserName, UserTypeEnum } from 'src/Types/Hub';
 
 @Component({
@@ -21,18 +23,19 @@ import { HubCallback, HubDataTypeEnum, HubNewGuest, HubNewUserName, UserTypeEnum
 export class HomeGameComponent extends ComponentHelper implements OnInit,AfterViewInit, OnDestroy {
   isUp = true;
   isStarted = false;
+  currentUrl = window.location.href;
   @ViewChild('loadingModal') private loadingModal: TemplateRef<any>;
   
   public guestObs: ReplaySubject<HubNewGuest> = new ReplaySubject<HubNewGuest>();
   
   constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService, 
-    private localStorage: LocalStoreManager, private modalService: BsModalService, private signalServ: SignalrService, private configurations: ConfigurationService) {
+    private localStorage: LocalStoreManager, private modalService: BsModalService, private signalServ: SignalrService, private configurations: ConfigurationService,
+    private alertServ: AlertService) {
       super();
       const game = gameManagerServ.game;
 
     if(!this.gameManagerServ.isOneDevice)
       console.log("Open the channel!!!");
-    navigator.clipboard.writeText("router.getCurrentNavigation().extractedUrl").then(() => console.log("Copied")).catch((error) => console.warn("not copied, ", error));
   }
   
   toggleArrow(): void {
@@ -44,6 +47,14 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
       return this.gameManagerServ.game.host.playerId;
       else return this.gameManagerServ.game.guest ? this.gameManagerServ.game.guest.playerId : Helper.DEFAULT_GUEST_PLAYER.playerId;
   }
+  
+  public get hostDeviceId() : string {
+      return this.gameManagerServ.game.hostDevice;
+  }
+  public get currentDeviceId() : string {
+    return this.configurations.deviceId;
+  }
+  
 
   ngOnInit() { }
   ngAfterViewInit(): void {
@@ -123,18 +134,19 @@ export class HomeGameComponent extends ComponentHelper implements OnInit,AfterVi
     this.gameManagerServ.ground.onResize();
   }
   
-  @HostListener('window:focus', ['$event'])
-  onFocus(event) {
-    console.log("focusssssss!");
-    
-  }
-
   bsModalRef?: BsModalRef;
   private openLoadingModal() {
     this.bsModalRef = this.modalService.show(this.loadingModal,{ignoreBackdropClick: true});
   }
   public closeLoadingModal() {
     this.bsModalRef.hide();
+  }
+
+  copyUrl(){
+    setTimeout(() =>{
+      navigator.clipboard.writeText(this.currentUrl)
+        .then(() => this.alertServ.showMessage("OK", "", MessageSeverity.success)).catch((error) => console.warn("not copied", error));
+    }, 500)
   }
 
   ngOnDestroy(): void {
