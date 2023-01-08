@@ -22,7 +22,14 @@
         "BackHome": "Back home",
         "Congrats": "Congratulations, you won the game!!",
         "Sorry": "Sorry, you lost.",
-        "End": "Game ended"
+        "End": "Game ended",
+        "ShareUrl": "Share the following link with someone else to start the game",
+        "Copy": "Copy",
+        "Loading": "Loading..."
+    },
+    "hub":{
+        "Disconnected": "You have been disconnected to the room, please click on the warning button to reconnect.",
+        "Reconnect": "Click to reconnect"
     },
     "modal":{
         "Confirm": "Confirm",

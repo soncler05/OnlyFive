@@ -62,8 +62,11 @@ export class RealGamePin {
     get fourPins(): PinGroup[]{
       return this._fourPins 
     }
-
-
+    
+    public get Players() : Player[] {
+      return [this._host, this._guest];
+    }
+    
 
     private _host: Player;
     private _guest: Player;
@@ -545,10 +548,12 @@ export class RealGamePin {
       
         let localDirections = directionIndex ? [ this._directions[directionIndex] ] : this._directions;
         
-      
         for (let ind = 0; ind < localDirections.length; ind++) {
-          const element = localDirections[ind];
-          alignPins = [...this.getAligns_isComplete(pin, element, -1, otherPlayer), ...this.getAligns_isComplete(pin, element, 1, otherPlayer)];
+          const direction = localDirections[ind];
+          const alignPositive = this.getAligns_isComplete(pin, direction, -1, otherPlayer);
+          const alignNegative = this.getAligns_isComplete(pin, direction, 1, otherPlayer);
+          
+          alignPins = [...alignPositive, ...alignNegative];
       
           if (alignPins.length === 5) {
             return alignPins;
@@ -559,15 +564,15 @@ export class RealGamePin {
       
     }
 
-    private getAligns_isComplete(pin, element, sign, otherPlayer) {
+    private getAligns_isComplete(pin: Pin, element, sign, otherPlayer) {
         var alignPins = [];
-        const playerId = !otherPlayer ? this._playerTurn.playerId : this._playerTurn.playerId;  
+        const playerId = !otherPlayer ? pin.playerId : this.Players.find(p => p.playerId != pin.playerId).playerId;  
         if(sign === 1) alignPins.push(pin);
         for (let index = 1; index <= 6; index++) {
           var nextPin = this.calculateNextPin(pin, element, sign, index);
           nextPin.playerId = playerId;
           nextPin = this.getPinByXYAndUserId(nextPin);
-          if(nextPin) 
+             if(nextPin) 
             if(sign === 1) alignPins.push(nextPin);
             else alignPins.unshift(nextPin);
           else break;      

@@ -9,9 +9,9 @@
   <h3 *ngIf="result.actualUser != result.winner">{{'game.Sorry' | translate}}</h3>
   <div class="row">
     <div class="col-12">
-      <span>{{result.game.host.userName}} <span class="score" [ngStyle]="{'background-color':result.game.host.color}">{{result.game.hostScore}}</span></span>
+      <span>{{result.game.hostName}} <span class="score" [ngStyle]="{'background-color':result.game.host.color}">{{result.game.hostScore}}</span></span>
       <span>&nbsp; - &nbsp;</span>
-      <span><span class="score" [ngStyle]="{'background-color':result.game.guest.color}">{{result.game.guestScore}}</span> {{result.game.guest.userName}}</span>
+      <span><span class="score" [ngStyle]="{'background-color':result.game.guest.color}">{{result.game.guestScore}}</span> {{result.game.guestName}}</span>
     </div>
   </div>
 </div>

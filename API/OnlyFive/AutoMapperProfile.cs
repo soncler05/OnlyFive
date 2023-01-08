@@ -1,17 +1,7 @@
-﻿// =============================
-// Email: info@ebenmonney.com
-// www.ebenmonney.com/templates
-// =============================
-
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
 using OnlyFive.Types.DTOS;
 using OnlyFive.Types.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExampleAngularCore.ViewModels
 {
@@ -46,7 +36,10 @@ namespace ExampleAngularCore.ViewModels
             CreateMap<Game, GameDTO>()
                 .ForMember(d => d.Host, map => map.MapFrom(o => o.Host))
                 .ForMember(d => d.Guest, map => map.MapFrom(o => o.Guest))
-                .ForMember(d => d.Rounds, map => map.MapFrom(o => o.Rounds));
+                .ForMember(d => d.HostName, map => map.MapFrom(o => o.Config == null ? null : o.Config.HostName))
+                .ForMember(d => d.GuestName, map => map.MapFrom(o => o.Config == null ? null : o.Config.GuestName))
+                .ForMember(d => d.LastRound, map => map.MapFrom(o => o.Rounds == null ? null : o.Rounds.LastOrDefault()))
+                ;
 
             CreateMap<GameDTO, Game>()
                 .ForMember(des => des.Host, src => src.Ignore())

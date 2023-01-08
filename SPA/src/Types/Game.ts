@@ -1,5 +1,5 @@
+import { Pin } from "src/tools/pin";
 import { Player } from "src/tools/player";
-import { User } from "./user";
 
 export class Game {
     id: number;
@@ -13,11 +13,12 @@ export class Game {
     gameRound: GameRoundsEnum;
     host: Player;
     guest: Player;
-    // host: User;
-    // guest: User;
+    hostName: string;
+    guestName: string;
     hostScore: number;
     guestScore: number;
     lastRoundOffset: number;
+    lastRound: Round;
 }
 export class Round {
     offset: number;
@@ -29,6 +30,18 @@ export class Round {
 export class LastRound {
     round: Round;
     game: Game;
+}
+
+export class NewPin {
+    offset: number;
+    pin: Pin;
+    gameUrlId: string;
+}
+
+export class CompleteRound {
+    offset: number;
+    playerId: string;
+    gameUrlId: string;
 }
 
 export enum GameRoundsEnum{

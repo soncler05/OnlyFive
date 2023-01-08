@@ -21,6 +21,19 @@ export class Helper {
         name: 'defaultUser',
         currentTurn: true
     } as Player;
+    public static readonly DEFAULT_GUEST_PLAYER: Player = {
+        playerId: 'B8B1D26B-ED7F-4994-81F0-87089D0154AA',
+        color: Helper.COLORS[0],
+        userName: 'defaultGuest',
+        name: 'defaultGuest',
+        currentTurn: true
+    } as Player;
+
+    
+    public  static get PLAYERS() : Player[] {
+        return [this.AUTOMATIC_PLAYER, this.DEFAULT_PLAYER, this.DEFAULT_GUEST_PLAYER];
+    }
+    
     
     public static readonly REGULAR_PROFILE: CanvasProfile = {
         height: 1600,
@@ -34,6 +47,12 @@ export class Helper {
         image: "./assets/img/bcg20.jpg",
         cellSideSize: 5
     };
+
+    public static completePlayerInfo(info: Player): Player {
+        if (!info) return null;
+        const additional = this.PLAYERS.find(p => p.playerId === info.playerId); 
+        return {...info, ...additional}
+      }
 
     public static uuidv4(): string {
         // @ts-ignore
@@ -49,5 +68,12 @@ export class Helper {
         var secondPart2 = ("000" + secondPart.toString(36)).slice(-3);
         return firstPart2 + secondPart2;
     }
-
+    public static  modifyStringifiedObject(propertyName: string, value: string, config?: any ): string {
+        let data = config ? JSON.parse(config) : {};
+        data[propertyName] = value;
+        return JSON.stringify(data);
+    }
+    public static nameof(f: Function): string {
+        return /\.([^\.;]+);?\s*\}$/.exec(f.toString())[1]
+    }
 }

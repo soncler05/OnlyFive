@@ -1,6 +1,5 @@
-﻿using OnlyFive.Types.DTOS;
-using OnlyFive.Types.Models;
-using System;
+﻿using OnlyFive.Types.Core.Enums;
+using OnlyFive.Types.DTOS;
 using System.Threading.Tasks;
 
 namespace OnlyFive.BusinessInterface
@@ -12,5 +11,7 @@ namespace OnlyFive.BusinessInterface
         Task<GameDTO> Find(int id);
         Task<GameDTO> FindByUrlId(string urlId);
         Task Update(GameDTO entity);
+        Task AddGuest(string roomId, string guestId, string deviceId, string userName);
+        Task UpdateName(string urlId, string newName, UserTypeEnum userTypeEnum);
     }
 }

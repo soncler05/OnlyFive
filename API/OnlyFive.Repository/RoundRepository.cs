@@ -26,7 +26,7 @@ namespace OnlyFive.Repository
         }
         public async Task<Round> Find(int gameId, int offset)
         {
-            return await _context.Set<Round>()
+            return await _context.Set<Round>().Include(r => r.Game)
                 .FirstOrDefaultAsync(r => r.GameId == gameId && r.Offset == offset);
         }
     }

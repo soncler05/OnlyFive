@@ -20,7 +20,14 @@
         "BackHome": "Paj prensipal",
         "Congrats": "Felisitasyon, ou genyen!",
         "Sorry": "Dezole, ou pèdi!",
-        "End": "Jwèt la fini"
+        "End": "Jwèt la fini",
+        "ShareUrl": "Pataje lyen ki anba a ak yon lòt moun pou j`wet la ka kòmanse",
+        "Copy": "Kopye",
+        "Loading": "Telechaje..."
+    },
+    "hub":{
+        "Disconnected": "Ou dekonekte  nan jwèt la, tanpri klike nan bouton avètisman an pou w retabli koneksyon an",
+        "Reconnect": "Retabli koneksyon an"
     },
     "modal":{
         "Confirm": "Konfime",

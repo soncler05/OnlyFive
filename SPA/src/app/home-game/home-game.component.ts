@@ -1,36 +1,129 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { ComponentHelper } from 'src/helpers/component-helper';  
+import { AlertService, MessageSeverity } from 'src/Services/alert.service';
 import { AppTranslationService } from 'src/Services/app-translation.service';
+import { ConfigurationService } from 'src/Services/configuration.service';
 import { GameManagerService } from 'src/Services/game-manager.service';
-import { GroundClass } from 'src/tools/GroundClass';
-import { Helper } from "src/tools/Helper";
-import { Game } from 'src/Types/Game';
+import { LocalStoreManager } from 'src/Services/local-store-manager.service';
+import { SignalrService } from 'src/Services/signalr-service';
+import { Helper } from 'src/tools/Helper';
+import { Pin } from 'src/tools/pin';
+import { Player } from 'src/tools/player';
+import { HubCallback, HubDataTypeEnum, HubNewGuest, HubNewUserName, UserTypeEnum } from 'src/Types/Hub';
 
 @Component({
   selector: 'app-home-game',
   templateUrl: './home-game.component.html',
   styleUrls: ['./home-game.component.css']
 })
-export class HomeGameComponent implements OnInit,AfterViewInit {
+export class HomeGameComponent extends ComponentHelper implements OnInit,AfterViewInit, OnDestroy {
   isUp = true;
-  game: Game;
-  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService) {
-    this.game = gameManagerServ.game;
-    
+  isStarted = false;
+  currentUrl = window.location.href;
+  @ViewChild('loadingModal') private loadingModal: TemplateRef<any>;
+  
+  public guestObs: ReplaySubject<HubNewGuest> = new ReplaySubject<HubNewGuest>();
+  
+  constructor(private activatedRoute:ActivatedRoute, private router: Router, private gameManagerServ: GameManagerService, appTranslationServ: AppTranslationService, 
+    private localStorage: LocalStoreManager, private modalService: BsModalService, private signalServ: SignalrService, private configurations: ConfigurationService,
+    private alertServ: AlertService) {
+      super();
+      const game = gameManagerServ.game;
+
+    if(!this.gameManagerServ.isOneDevice)
+      console.log("Open the channel!!!");
   }
   
-
   toggleArrow(): void {
     this.isUp = !this.isUp;
   } 
 
+  get currentUserId(){
+    if(this.gameManagerServ.game.host.deviceId === this.configurations.deviceId)
+      return this.gameManagerServ.game.host.playerId;
+      else return this.gameManagerServ.game.guest ? this.gameManagerServ.game.guest.playerId : Helper.DEFAULT_GUEST_PLAYER.playerId;
+  }
+  
+  public get hostDeviceId() : string {
+      return this.gameManagerServ.game.hostDevice;
+  }
+  public get currentDeviceId() : string {
+    return this.configurations.deviceId;
+  }
+  
 
   ngOnInit() { }
   ngAfterViewInit(): void {
     const urlId = this.activatedRoute.snapshot.paramMap.get("urlId");
-    this.gameManagerServ.start(urlId, this.game);
+    
+    if (this.gameManagerServ.isOneDevice) {  
+      this.gameManagerServ.start();
+    } else {
+      
+      this.signalServ.startConnection();
+      this.signalServ.listenRoom(urlId, this.currentUserId, this.configurations.deviceId, this.configurations.userName, this.hubCallbacks);
+      
+      if (!this.gameManagerServ.game.guest) {
+
+        this.openLoadingModal();
+        this.guestObs.pipe(takeUntil(this.unsubscribe$), take(1)).subscribe((data) => {
+            const additionalData = Helper.PLAYERS.find(p => p.playerId === data.playerId);
+            this.gameManagerServ.game.guest = additionalData;
+            this.gameManagerServ.game.guest.name = data.userName;
+            this.gameManagerServ.game.guestName = data.userName;
+            this.gameManagerServ.game.guest.deviceId = data.deviceId;
+            this.gameManagerServ.game.guestId = data.playerId;
+            this.gameManagerServ.game.guestDevice = data.deviceId;
+
+            this.gameManagerServ.start();
+            this.closeLoadingModal();
+        })
+      } 
+      else {
+        this.gameManagerServ.start();
+      }
+    }
+
   }
-  
+
+  private callBackLog(data){
+    console.log(data);
+  }
+
+  private processNewGuest(data: HubNewGuest){
+    this.guestObs.next(data);   
+    this.guestObs.complete();  
+  }
+  private processhubNewUserName(data: HubNewUserName){
+    if(data.playerType === UserTypeEnum.Host && this.configurations.deviceId != this.gameManagerServ.game.hostDevice) {
+      this.gameManagerServ.game.hostName = data.userName;
+    }    
+    
+    if(data.playerType === UserTypeEnum.Guest && this.configurations.deviceId != this.gameManagerServ.game.guestDevice) {
+      this.gameManagerServ.game.guestName = data.userName;
+    }    
+  }
+  private processhubNewPin(data: Pin){
+    const player = this.gameManagerServ.PLAYERS.find(p => p.playerId === data.playerId);
+    if(player.deviceId != this.configurations.deviceId)
+      this.gameManagerServ.ground.play(data);
+       
+  }
+
+  private hubCallbacks: HubCallback[] =
+  [
+    {type: HubDataTypeEnum.Guest, callback: this.processNewGuest.bind(this)},
+    {type: HubDataTypeEnum.Host, callback: this.callBackLog},
+    {type: HubDataTypeEnum.NewUserName, callback: this.processhubNewUserName.bind(this)},
+    {type: HubDataTypeEnum.Pin, callback: this.processhubNewPin.bind(this)},
+    {type: HubDataTypeEnum.Ping, callback: this.callBackLog}
+  ];
+
+
   @HostListener('window:scroll', ['$event'])
   noScroll(event) {
       window.scrollTo(0, 0);
@@ -40,6 +133,25 @@ export class HomeGameComponent implements OnInit,AfterViewInit {
   onResize(event) {
     this.gameManagerServ.ground.onResize();
   }
-
   
+  bsModalRef?: BsModalRef;
+  private openLoadingModal() {
+    this.bsModalRef = this.modalService.show(this.loadingModal,{ignoreBackdropClick: true});
+  }
+  public closeLoadingModal() {
+    this.bsModalRef.hide();
+  }
+
+  copyUrl(){
+    setTimeout(() =>{
+      navigator.clipboard.writeText(this.currentUrl)
+        .then(() => this.alertServ.showMessage("OK", "", MessageSeverity.success)).catch((error) => console.warn("not copied", error));
+    }, 500)
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.gameManagerServ.isStarted = false;
+    if(this.signalServ.isConnected) this.signalServ.stopConnection();
+  }
 }

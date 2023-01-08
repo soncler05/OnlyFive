@@ -7,24 +7,28 @@
       src="/assets/img/O5.png"
     />
   </a>
-  <span *ngIf="game">({{game.lastRoundOffset + '/' + game.gameRound}})
-    <span>{{game.host.userName}} <span class="score" [ngStyle]="{'background-color':game.host.color}">{{hostScore}}</span></span>
+  <span *ngIf="isStarted">({{game.lastRoundOffset + '/' + game.gameRound}})
+    <span>
+      {{game.hostName}} 
+      <a class="edit-username" (click)="editUserName(game.host.playerId)" *ngIf="!isOneDevice && game.hostDevice === deviceId"><i class="fa fa-pencil"></i></a>
+      <span class="score" [ngStyle]="{'background-color':game.host.color}">{{hostScore}}</span>
+    </span>
     <span>&nbsp; - &nbsp;</span>
-    <span><span class="score" [ngStyle]="{'background-color':game.guest.color}">{{guestScore}}</span> {{game.guest.userName}} <a class="edit-username" (click)="editUserName()"><i class="fa fa-pencil"></i></a></span>
+    <span>
+      <span class="score" [ngStyle]="{'background-color':game.guest.color}">{{guestScore}}</span>
+       {{game.guestName}} 
+       <a class="edit-username" (click)="editUserName(game.guest.playerId)" *ngIf="game.guestDevice === deviceId"><i class="fa fa-pencil"></i></a>
+    </span>
   </span>
-  <!-- <span>
-    <a class="nav-link" [routerLink]="['/game']" style="color: white;">Game Home
-    </a>
+  
+  <span class="ml-3" *ngIf="!isOneDevice" >
+    <i class="fa fa-wifi fa-lg" *ngIf="isConnectedToHub"></i>
+    <button type="button" *ngIf="!isConnectedToHub" class="btn btn-primary btn-sm" (click)="reload()" data-toggle="tooltip" data-placement="right" [attr.title]="'hub.Reconnect' | translate">
+      <i class="fa fa-exclamation-triangle fa-lg text-warning"></i></button>
   </span>
-  <span>
-    <a class="nav-link" [routerLink]="['/auth']" style="color: white;">Auth
-    </a>
-  </span> -->
 
-    <!-- <div class="spacer"></div>
-    <button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button> -->
+  <div class="spacer"></div>
 
-    <div class="spacer"></div>
   <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://twitter.com/soncler05" title="Twitter">
     
     <svg id="twitter-logo" height="24" data-name="Logo — FIXED" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">

@@ -1,5 +1,5 @@
 
-<div class="box">
+<div class="box" *ngIf="!isReload">
 
   <div class="text-right">
     <div class="btn-group" dropdown>
@@ -32,7 +32,19 @@
         </li>
       </ul>
     </div>
-    <button type="button" class="btn btn-primary  btn-lg mb-2" (click)="playWithAFriend()">{{'home.options.FriendPlayer' | translate}}</button>
+    <div class="btn-group mb-2" dropdown>
+      <button id="button-basic" dropdownToggle aria-controls="dropdown-basic" type="button" class="btn btn-primary btn-lg dropdown-toggle">
+        {{'home.options.FriendPlayer' | translate}}<span class="caret"></span></button>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+          role="menu" aria-labelledby="button-basic">
+        <li role="menuitem"><a class="dropdown-item" (click) = "playWithAFriend(gameTypes.One)">{{'home.options.onePOptions.One' | translate}}</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playWithAFriend(gameTypes.Three)">{{'home.options.onePOptions.Three' | translate}}</a></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playWithAFriend(gameTypes.Five)">{{'home.options.onePOptions.Five' | translate}}</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem"><a class="dropdown-item" (click) = "playWithAFriend(gameTypes.Nine)">{{'home.options.onePOptions.Nine' | translate}}</a>
+        </li>
+      </ul>
+    </div>
     <button type="button"  class="btn btn-outline-primary mb-2 btn-lg" (click)="playWithARandomPlayer()" style="color: white; border-color: white;">{{'home.options.RandomPlayer' | translate}}</button>
   </div>
 </div>

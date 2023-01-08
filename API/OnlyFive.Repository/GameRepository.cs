@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlyFive.RepositoryInterface;
 using OnlyFive.Types.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlyFive.Repository
@@ -25,12 +22,22 @@ namespace OnlyFive.Repository
         }
         public async Task<Game> Find(int id)
         {
-            return await _context.Set<Game>().FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Set<Game>()
+                .Include(g => g.Config)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+        public async Task<Game> FindWithRound(string gameUrlId, int rounDOffset)
+        {
+            return await _context.Set<Game>().Include(g => g.Rounds.Where(r => r.Offset == rounDOffset))
+                .FirstOrDefaultAsync(g => g.UrlId == gameUrlId);
         }
         public async Task<Game> FindByUrlId(string urlId)
         {
-            return await _context.Set<Game>().Include(g => g.Host).Include(g => g.Guest).
-                FirstOrDefaultAsync(e => e.UrlId == urlId);
+            return await _context.Set<Game>()
+                .Include(g => g.Host).Include(g => g.Guest)
+                .Include(g => g.Config)
+                .Include(g => g.Rounds)
+                .FirstOrDefaultAsync(e => e.UrlId == urlId);
         }
         public async Task Update(Game entity)
         {
