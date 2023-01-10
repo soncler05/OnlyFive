@@ -67,7 +67,7 @@ namespace OnlyFive.Business
 
             if (userTypeEnum == UserTypeEnum.Host)
                 config.HostName = newName;
-            else if (userTypeEnum == UserTypeEnum.Host)
+            else if (userTypeEnum == UserTypeEnum.Guest)
                 config.GuestName = newName;
 
             await _configRepository.Update(config);
