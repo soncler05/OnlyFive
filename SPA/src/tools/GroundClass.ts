@@ -118,9 +118,10 @@ export class GroundClass {
         return this.Players.find(p => p.playerId == playerId)
     }
     private get actualPlayer() : Player {
-      if (this._host.deviceId === this._deviceId) return this._host;
-      if (this._guest.deviceId === this._deviceId) return this._guest;
-      return null;
+        if(this._isOneDevice) return this._guest;
+        if (this._host.deviceId === this._deviceId) return this._host;
+        if (this._guest.deviceId === this._deviceId) return this._guest;
+        return null;
     }
 
     onResize() {
