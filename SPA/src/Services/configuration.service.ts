@@ -42,7 +42,7 @@ export class ConfigurationService {
   }
 
   get userName() {
-    return this.localStorage.getDataObject<string>(DBkeys.CURRENT_USER);
+    return this.localStorage.getDataObject<string>(DBkeys.CURRENT_USER) ?? "default";
   }
 
 

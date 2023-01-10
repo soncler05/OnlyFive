@@ -3,7 +3,7 @@
         "WelcomeMsg": "Put 5 in a row to win!",
         "NotImplemented": "Coming soon",
         "RoundCompletedTitle": "Round completed",
-        "Completed": "{userName} has completed a five.",
+        "Completed": "{{userName}} has completed a five.",
         "options":{
             "OnePlayer":"Play by my self",     
             "FriendPlayer":"Play with a friend",     
@@ -18,7 +18,7 @@
     },
     "game": {
         "RoundCompletedTitle": "Round completed",
-        "RoundCompletedMsg": "{userName} has completed a 5.",
+        "RoundCompletedMsg": "{{userName}} has completed a 5.",
         "BackHome": "Back home",
         "Congrats": "Congratulations, you won the game!!",
         "Sorry": "Sorry, you lost.",

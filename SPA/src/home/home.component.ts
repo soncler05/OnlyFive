@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public isReload = false;
 
   constructor(public configurations: ConfigurationService, private elementRef: ElementRef, private gameServ: GameService, private router:Router, 
-    private localStorage: LocalStoreManager,
     private appTranslationServ: AppTranslationService, private alertService: AlertService, private signalServ: SignalrService) {   
   }
   ngAfterViewInit() {
@@ -53,8 +52,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const urlId = Helper.generateUID();
     const host =  isOnePlayer ?  Helper.AUTOMATIC_PLAYER : Helper.DEFAULT_PLAYER;
     const guest = isOnePlayer ? Helper.DEFAULT_PLAYER : null;
-    const guestName = isOnePlayer ? this.localStorage.getData(DBkeys.CURRENT_USER) : null;
-    const hostName = isOnePlayer ? Helper.AUTOMATIC_PLAYER.userName : this.localStorage.getData(DBkeys.CURRENT_USER);
+    const guestName = isOnePlayer ? this.configurations.userName : null;
+    const hostName = isOnePlayer ? Helper.AUTOMATIC_PLAYER.userName : this.configurations.userName;
     const game:Game = {
       urlId: urlId,
       startDate: new Date(),
