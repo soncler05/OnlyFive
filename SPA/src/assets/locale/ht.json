@@ -2,6 +2,9 @@
     "home": {
         "WelcomeMsg": "Jwèt mòpyon, alinye 5 pwen pou w ka genyen!",
         "NotImplemented": "Fonksyonalite sa a poko disponib.",
+        "RoundCompletedTitle": "Wonn sa a tèmine",
+        "Completed": "{{userName}} konplete yon senk.",
+        "Instruction": "Only Five se yon platfòm ki pèmèt ou jwe mòpyon(Gomoku) nan jan li jwe an Ayiti a. Aliyen 5 pyès an orizontal, vètikal oswa dyagonal pou w genyen. Kounya a menm kòmanse jwe pou kont oubyen defye yon zanmi pou w ka egzèse kapasite analitik ou.  ",
         "options":{
             "OnePlayer":"Jwe pou kont mwen",     
             "FriendPlayer":"Jwe ak  yon zanmi",     

@@ -2,6 +2,9 @@
     "home": {
         "WelcomeMsg": "Aligne 5 points pour gagner! ",
         "NotImplemented": "Bientôt disponible",
+        "RoundCompletedTitle": "Partie completée",
+        "Completed": "{{userName}} a completé un cinq.",
+        "Instruction": "Only Five est une version haïtienne du jeu de stratégie classique, Gomoku. Les joueurs jouent à tour de rôle en plaçant leurs pièces aux intersections de la grille. Contrairement au Gomoku traditionnel, l'objectif dans Only Five est de connecter seulement cinq pièces en ligne, pas six ni sept, pour gagner. Profitez du jeu seul ou défiez un ami, car le premier joueur à connecter cinq pièces horizontalement, verticalement ou diagonalement gagne. Mettez vos compétences de réflexion à l'épreuve avec Only Five",
         "options":{
             "OnePlayer":"Jouer seul",     
             "FriendPlayer":"Jouer avec un ami",     
