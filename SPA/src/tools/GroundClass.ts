@@ -405,8 +405,6 @@ export class GroundClass {
         this._gamePin.clearGroups();
         this._gamePin.setAutomaticPlayerTurn();
         this._gamePin.isEnded = false;
-        if(this._isOneDevice) this._gamePin.automaticPlay();
-        console.log("isEnded->",this._gamePin.isEnded);
-        
+        if(this._isOneDevice) this._gamePin.automaticPlay();        
     }
 }
