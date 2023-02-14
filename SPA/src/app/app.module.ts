@@ -36,6 +36,7 @@ import { ToastaModule } from 'ngx-toasta';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar-observables';
 import { LoadingInterceptorService } from 'src/Services/http/loading.interceptor.service';
 import { SignalrService } from 'src/Services/signalr-service';
+import { CommentComponent } from './home-game/comment/comment.component';
 
 
 const GUARDS = [GameGuard];
@@ -53,7 +54,8 @@ const GUARDS = [GameGuard];
         NavComponent,
         GameConfigComponent,
         GameResultComponent,
-        GeneralModalComponent
+        GeneralModalComponent,
+        CommentComponent
     ],
     imports: [
         ReactiveFormsModule,

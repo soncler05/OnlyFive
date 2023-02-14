@@ -1,6 +1,7 @@
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 using OnlyFive.Business;
 using OnlyFive.Business.Authorization;
 using OnlyFive.BusinessInterface;
@@ -137,6 +140,25 @@ namespace OnlyFive
                 });
             });
 
+            //Add MailKit
+            services.AddMailKit(optionBuilder =>
+            {
+                optionBuilder.UseMailKit(new MailKitOptions()
+                {
+                    //get options from sercets.json
+                    Server = Configuration["Email:Server"],
+                    Port = Convert.ToInt32(Configuration["Email:Port"]),
+                    SenderName = Configuration["Email:SenderName"],
+                    SenderEmail = Configuration["Email:SenderEmail"],
+
+                    // can be optional with no authentication 
+                    Account = Configuration["Email:SenderEmail"],
+                    Password = Configuration["Email:Password"],
+                    // enable ssl or tls
+                    Security = true
+                });
+            });
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddProviders<ApplicationUser>();
@@ -160,6 +182,9 @@ namespace OnlyFive
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IRoundRepository, RoundRepository>();
             services.AddTransient<IRoundService, RoundService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<ICustomEmailService, CustomEmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

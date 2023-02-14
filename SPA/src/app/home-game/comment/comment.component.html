@@ -1,0 +1,8 @@
+<form id="container" [formGroup]="form">
+  <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">{{"home.comment.Title" | translate}}</h1>
+  <input type="text" id="name" class="form-control mb-2" [ngClass]="{'is-invalid': f.name.touched && f.name.invalid}" [placeholder]="'home.comment.Name' | translate" formControlName="name" autofocus="">
+  <input type="text" id="email" class="form-control mb-2" [ngClass]="{'is-invalid': f.email.touched && f.email.invalid}" [placeholder]="'home.comment.Email' | translate" formControlName="email" autofocus="">
+  <textarea  id="comment" rows="10" class="form-control" [ngClass]="{'is-invalid': f.message.touched && f.message.invalid}" [placeholder]="'home.comment.Message' | translate" formControlName="message"></textarea>
+  <hr>
+  <button class="btn btn-primary btn-block"  type="button" id="btn-signup" (click)="submit()" [disabled]="!form.valid">Send<i class="fa fa-send"></i></button>
+</form> 

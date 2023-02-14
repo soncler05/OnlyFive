@@ -1,29 +1,35 @@
 import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { takeUntil } from 'rxjs/operators';
+import { CommentComponent } from 'src/app/home-game/comment/comment.component';
+import { ComponentHelper } from 'src/helpers/component-helper';
 import { AlertService } from 'src/Services/alert.service';
 import { AppTranslationService } from 'src/Services/app-translation.service';
 import { ConfigurationService } from 'src/Services/configuration.service';
+import { CommentService } from 'src/Services/http/comment.service';
 import { GameService } from 'src/Services/http/game.service';
-import { LocalStoreManager } from 'src/Services/local-store-manager.service';
-import { SignalrService } from 'src/Services/signalr-service';
 import { Helper } from 'src/tools/Helper';
+import { Comment } from 'src/Types/comment';
 import { Game, GameRoundsEnum } from 'src/Types/Game';
-import { DBkeys } from 'src/Utilities/db-keys';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent extends ComponentHelper implements OnInit, AfterViewInit {
 
   public currentLanguage = "";
   public deviceId = "";
   gameTypes = GameRoundsEnum; 
   public isReload = false;
+  commentModalRef?: BsModalRef<CommentComponent>;
 
   constructor(public configurations: ConfigurationService, private elementRef: ElementRef, private gameServ: GameService, private router:Router, 
-    private appTranslationServ: AppTranslationService, private alertService: AlertService, private signalServ: SignalrService) {   
+    private appTranslationServ: AppTranslationService, private alertService: AlertService, private modalService: BsModalService,
+    private commentServ: CommentService, private translateServ: AppTranslationService) {   
+      super();
   }
   ngAfterViewInit() {
       this.elementRef.nativeElement.ownerDocument
@@ -80,5 +86,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setLanguage(value){
     this.currentLanguage = value;
     this.configurations.language = value;
+  }
+
+  private SendComment(comment: Comment) {
+    this.commentServ.send(comment).pipe(takeUntil(this.unsubscribe$)).subscribe(() => 
+    this.alertService.showMessage(this.translateServ.getTranslation('game.comment.Thanks')));
+  }
+
+  openCommentModal(){
+    this.commentModalRef = this.modalService.show(CommentComponent, {initialState: {
+        send: this.SendComment.bind(this)
+      }});
   }
 }

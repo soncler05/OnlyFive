@@ -15,6 +15,7 @@ namespace OnlyFive.Repository
         public DbSet<Game> Games { get; set; }
         public DbSet<Config> Configs { get; set; }
         public DbSet<Round> Rounds { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -43,6 +44,9 @@ namespace OnlyFive.Repository
 
             builder.Entity<Config>().HasOne(c =>  c.Game).WithOne(c => c.Config).HasForeignKey<Config>(c => c.GameId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Config>().HasKey(c => new { c.GameId });
+
+            builder.Entity<Comment>().HasKey(c => c.Id);
+            builder.Entity<Comment>().Property(c => c.Date).HasDefaultValue(DateTime.UtcNow);
 
 
             //builder.Entity<Customer>().Property(c => c.Name).IsRequired().HasMaxLength(100);

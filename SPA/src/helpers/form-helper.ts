@@ -1,8 +1,10 @@
-import { UntypedFormGroup } from "@angular/forms";
+import { AbstractControl, FormGroup } from "@angular/forms";
 import { ComponentHelper } from "./component-helper";
 
-export abstract class FormHelper extends ComponentHelper {
-    form: UntypedFormGroup;
+export abstract class FormHelper<Type extends {
+  [K in keyof Type]: AbstractControl<any>;
+} = any> extends ComponentHelper {
+    form: FormGroup<Type>;
     get Name() { return this.form.get('name'); }
 
     

@@ -33,6 +33,9 @@ namespace ExampleAngularCore.ViewModels
             CreateMap<Round, RoundDTO>()
                 .ReverseMap();
 
+            CreateMap<Comment, CommentDTO>()
+                .ReverseMap();
+
             CreateMap<Game, GameDTO>()
                 .ForMember(d => d.Host, map => map.MapFrom(o => o.Host))
                 .ForMember(d => d.Guest, map => map.MapFrom(o => o.Guest))

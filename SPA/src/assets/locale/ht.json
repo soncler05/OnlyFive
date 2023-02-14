@@ -5,6 +5,16 @@
         "RoundCompletedTitle": "Wonn sa a tèmine",
         "Completed": "{{userName}} konplete yon senk.",
         "Instruction": "Only Five se yon platfòm ki pèmèt ou jwe mòpyon(Gomoku) nan jan li jwe an Ayiti a. Aliyen 5 pyès an orizontal, vètikal oswa dyagonal pou w genyen. Kounya a menm kòmanse jwe pou kont oubyen defye yon zanmi pou w ka egzèse kapasite analitik ou.  ",
+        "CommentText": "Pou nenpòt kòmantè oswa sijesyon klike",
+        "comment":{
+            "Send": "Voye ale",
+            "Title": "kòmantè oswa sijesyon",
+            "Name": "Non",
+            "Email": "Imel", 
+            "Message":"Mesaj",
+            "Thanks": "Mèsi pou kòmantè a"
+        },
+        "Here":"la a",
         "options":{
             "OnePlayer":"Jwe pou kont mwen",     
             "FriendPlayer":"Jwe ak  yon zanmi",     

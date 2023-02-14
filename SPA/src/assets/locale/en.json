@@ -5,8 +5,18 @@
         "RoundCompletedTitle": "Round completed",
         "Completed": "{{userName}} has completed a five.",
         "Instruction": "Only Five is a Haitian twist on the classic strategy game, Gomoku. Players take turns placing their pieces on the intersections of a grid. Unlike traditional Gomoku, the objective in Only Five is to connect just five pieces in a row, not six or seven, to win. Enjoy the game solo or challenge a friend, as the first player to connect five pieces horizontally, vertically, or diagonally, wins. Put your thinking skills to the test with Only Five.",
+        "CommentText": "For any comment or suggestion click",
+        "comment":{
+            "Send": "Send",
+            "Title": "Comment or suggestion",
+            "Name": "Name",
+            "Email": "Email", 
+            "Message":"Message",
+            "Thanks": "Thank you for your feedback"
+        },
+        "Here":"here",
         "options":{
-            "OnePlayer":"Play by my self",     
+            "OnePlayer":"Play alone",     
             "FriendPlayer":"Play with a friend",     
             "RandomPlayer":"Play with a random player",
             "onePOptions": {
