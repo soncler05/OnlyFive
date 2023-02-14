@@ -42,7 +42,7 @@ export class GameGuard implements CanActivate {
             } 
 
             this.gameManagerServ.game = this.game;
-            console.log(this.gameManagerServ.game);
+            
             
             return this.endedAction();
         }));
