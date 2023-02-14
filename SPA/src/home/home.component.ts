@@ -90,7 +90,7 @@ export class HomeComponent extends ComponentHelper implements OnInit, AfterViewI
 
   private SendComment(comment: Comment) {
     this.commentServ.send(comment).pipe(takeUntil(this.unsubscribe$)).subscribe(() => 
-    this.alertService.showMessage(this.translateServ.getTranslation('game.comment.Thanks')));
+    this.alertService.showMessage(this.translateServ.getTranslation('home.comment.Thanks')));
   }
 
   openCommentModal(){
