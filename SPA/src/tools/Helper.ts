@@ -48,9 +48,10 @@ export class Helper {
         cellSideSize: 5
     };
 
-    public static completePlayerInfo(info: Player): Player {
+    public static completePlayerInfo(info: Player, userName: string = null): Player {
         if (!info) return null;
         const additional = this.PLAYERS.find(p => p.playerId === info.playerId); 
+        if(userName) additional.userName = userName;
         return {...info, ...additional}
       }
 
