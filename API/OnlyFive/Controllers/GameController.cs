@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using OnlyFive.BusinessInterface;
 using OnlyFive.Hubs;
 using OnlyFive.Types.Core.Enums;
 using OnlyFive.Types.DTOS;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -17,11 +17,13 @@ namespace OnlyFive.Controllers
     {
         private readonly IGameService _gameService;
         private readonly IHubContext<RoomHub> _hubContext;
+        private readonly ILogger _logger;
 
-        public GameController(IGameService gameService, IHubContext<RoomHub> hubContext)
+        public GameController(IGameService gameService, IHubContext<RoomHub> hubContext, ILogger<GameController> logger)
         {
             _gameService = gameService;
             _hubContext = hubContext;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace OnlyFive.Controllers
             }
             catch (Exception ex )
             {
-                Log.Error(ex.Message);
+                //Log.Error(ex.Message);
                 throw;
             }
         }
@@ -60,6 +62,7 @@ namespace OnlyFive.Controllers
         [HttpGet("urlId/{urlId}")]
         public async Task<IActionResult> Find(string urlId)
         {
+            _logger.LogInformation($"{nameof(Find)} started");
             var result = await _gameService.FindByUrlId(urlId);
             if (result != null)
                 return Ok(result);

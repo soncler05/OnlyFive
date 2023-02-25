@@ -50,6 +50,7 @@ namespace OnlyFive
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                     logging.AddFile(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddAzureWebAppDiagnostics();
                 });
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OnlyFive.BusinessInterface;
 using OnlyFive.Types.DTOS;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -14,12 +14,15 @@ namespace OnlyFive.Controllers
         private readonly ICommentService _service;
         private readonly ICustomEmailService _emailService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<CommentController> _logger;
 
-        public CommentController(ICommentService service, ICustomEmailService emailService, IServiceProvider serviceProvider)
+        public CommentController(ICommentService service, ICustomEmailService emailService, IServiceProvider serviceProvider,
+            ILogger<CommentController> logger)
         {
             _service = service;
             _emailService = emailService;
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -42,7 +45,7 @@ namespace OnlyFive.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex.Message);
+                    _logger.LogError(ex.Message);
                 }
             });
         }
